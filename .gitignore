@@ -1,0 +1,11 @@
+# Скомпилированные файлы
+*.o
+*.exe
+a.out
+matrix_program
+
+# Файлы VS Code
+.vscode/
+
+# Файлы SonarCloud
+.sonar/
