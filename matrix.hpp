@@ -6,15 +6,17 @@ class Matrix {
   int **data;
   int rows;
   int cols;
+  void swap(Matrix& other);
   
  public:
   Matrix();
   Matrix(int a, int b);
   ~Matrix();
+  Matrix(Matrix& other);
+  Matrix& operator=(Matrix other);
   void fill();
   void print();
   Matrix subtract(Matrix item);
-  Matrix(const Matrix& other);
 };
 
 int input();
