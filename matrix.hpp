@@ -12,7 +12,7 @@ class Matrix {
   Matrix();
   Matrix(int a, int b);
   ~Matrix();
-  Matrix(Matrix& other);
+  Matrix(const Matrix& other);
   Matrix& operator=(Matrix other);
   void fill();
   void print();

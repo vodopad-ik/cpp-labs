@@ -1,7 +1,6 @@
 #include <iostream>
 #include <limits>
-#include <iomanip>
-#include <utility>
+#include <format>
 #include "matrix.hpp"
 using namespace std;
 
@@ -15,20 +14,21 @@ int input(){
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         } else break;
     }
-
     return number;
   }
-
+    
 void Matrix::swap(Matrix& other){
   std::swap(rows, other.rows);
   std::swap(cols, other.cols);
   std::swap(data, other.data);
 }
 
-Matrix::Matrix() : rows(0), cols(0), data(nullptr) {}
+Matrix::Matrix() : data(nullptr), rows(0), cols(0) {}
 Matrix::Matrix(int a, int b): rows(a), cols(b) {
     if(a<=0 || b<=0) {
-      throw invalid_argument("Не корректные размеры матрицы!");
+      rows=0;
+      cols=0;
+      data=nullptr;
     }
     data=new int*[rows];
     for(int i=0; i<rows;i++){
@@ -46,7 +46,7 @@ Matrix::~Matrix(){
     }
 }
 
-Matrix::Matrix(Matrix& other): rows(other.rows), cols(other.cols){
+Matrix::Matrix(const Matrix& other): rows(other.rows), cols(other.cols){
   data = new int*[rows];
   for (int i = 0; i < rows; ++i) {
     data[i] = new int[cols];
@@ -79,7 +79,7 @@ void Matrix::print(){
   cout<<"\nПолученная матрица: \n";
   for(int i=0; i<rows; i++){
     for (int j=0; j< cols; j++) {
-      cout<< setw(4)<<data[i][j]<<" ";
+      cout<< format("{:4} ",data[i][j]);
     }
     cout<<endl;
   }
@@ -87,7 +87,7 @@ void Matrix::print(){
 
 Matrix Matrix::subtract(Matrix item) {
   if(this->cols!=item.cols || this->rows!=item.rows) {
-    cout<<"Вычитание невозможно, т.к. матрицы разных размеров.\n";
+    cout<<"Вычитание невозможно, т.к. матрицы разны х размеров.\n";
     return Matrix();
   }
   Matrix result(this->rows, this->cols);
