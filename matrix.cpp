@@ -1,6 +1,5 @@
 #include <iostream>
 #include <limits>
-//#include <stdexcept>
 #include <iomanip>
 #include <utility>
 #include "matrix.hpp"
@@ -63,7 +62,7 @@ Matrix& Matrix::operator=(Matrix other) {
 }
 
 void Matrix::fill(){
-  cout<<"\nПожалуйста заполните матрицу: \n";
+  cout<<"\nПожалуйста заполните матрицу: \n\n";
     for(int i=0; i<rows; i++){
       for (int j=0; j< cols; j++) {
         cout << "Введите целое число(элемент["<<i+1<<"]["<<j+1<<"]): ";
