@@ -6,7 +6,7 @@ class Matrix {
   int **data;
   int rows;
   int cols;
-  void swap(Matrix& other);
+  void swap(Matrix& other) noexcept;
   
  public:
   Matrix();
@@ -15,8 +15,8 @@ class Matrix {
   Matrix(const Matrix& other);
   Matrix& operator=(Matrix other);
   void fill();
-  void print();
-  Matrix subtract(Matrix item);
+  void print() const;
+  Matrix subtract(const Matrix item) const;
 };
 
 int input();

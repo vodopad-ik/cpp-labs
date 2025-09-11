@@ -3,21 +3,8 @@
 #include <format>
 #include "matrix.hpp"
 using namespace std;
-
-int input(){
-    int number;
-      while (true) {
-        cin >> number;
-        if (cin.fail() || cin.peek() != '\n') {
-            cout << "Некорректный ввод. Пожалуйста, введите только целое число.\n";
-            cin.clear();
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        } else break;
-    }
-    return number;
-  }
     
-void Matrix::swap(Matrix& other){
+void Matrix::swap(Matrix& other) noexcept {
   std::swap(rows, other.rows);
   std::swap(cols, other.cols);
   std::swap(data, other.data);
@@ -71,7 +58,7 @@ void Matrix::fill(){
     }
   } 
 
-void Matrix::print(){
+void Matrix::print() const {
   if(!rows||!cols) {
     cout<<"\nПолученная матрица пуста.\n";
     return;
@@ -85,7 +72,7 @@ void Matrix::print(){
   }
 }
 
-Matrix Matrix::subtract(Matrix item) {
+Matrix Matrix::subtract(const Matrix item) const {
   if(this->cols!=item.cols || this->rows!=item.rows) {
     cout<<"Вычитание невозможно, т.к. матрицы разны х размеров.\n";
     return Matrix();

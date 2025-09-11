@@ -1,5 +1,6 @@
 #include <iostream>
 #include <locale>
+#include "utils.hpp"
 #include "matrix.hpp"
 #include "menu.hpp"
 using namespace std;
@@ -22,21 +23,23 @@ int main() {
     }
     switch (choice) {
   case 1:
-    if(iteration<2){
+    if(iteration>1) item3=item1.subtract(item2);
+    else if(iteration==0){
       cout << "Введите количество строк матрицы: ";
       int size_1=input();
       cout << "Введите количество столбцов матрицы: ";
       int size_2=input();      
-      if(!iteration){
-        item1=Matrix(size_1, size_2);
-        item1.fill();
+      item1=Matrix(size_1, size_2);
+      item1.fill();
       }
-      else if(iteration==1){
-        item2=Matrix(size_1, size_2);
-        item2.fill();
+    else if(iteration==1){
+      cout << "Введите количество строк матрицы: ";
+      int size_1=input();
+      cout << "Введите количество столбцов матрицы: ";
+      int size_2=input();      
+      item2=Matrix(size_1, size_2);
+      item2.fill();
       }
-    }
-    else item3=item1.subtract(item2);
     break;
   case 2:
     if(iteration==0) item1.print();
