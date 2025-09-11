@@ -19,6 +19,4 @@ class Matrix {
   Matrix subtract(const Matrix item) const;
 };
 
-int input();
-
 #endif

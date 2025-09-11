@@ -2,6 +2,7 @@
 #include <limits>
 #include <format>
 #include "matrix.hpp"
+#include "utils.hpp"
 using namespace std;
     
 void Matrix::swap(Matrix& other) noexcept {
