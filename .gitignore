@@ -3,6 +3,8 @@
 *.exe
 a.out
 matrix_program
+main               # Добавьте эту строку
+lab_1:matrix_program # Добавьте эту строку
 
 # Файлы VS Code
 .vscode/
