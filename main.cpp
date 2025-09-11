@@ -23,8 +23,7 @@ int main() {
     }
     switch (choice) {
   case 1:
-    if(iteration>1) item3=item1.subtract(item2);
-    else if(iteration==0){
+    if(iteration==0){
       cout << "Введите количество строк матрицы: ";
       int size_1=input();
       cout << "Введите количество столбцов матрицы: ";
@@ -40,6 +39,7 @@ int main() {
       item2=Matrix(size_1, size_2);
       item2.fill();
       }
+      else item3=item1.subtract(item2);
     break;
   case 2:
     if(iteration==0) item1.print();
