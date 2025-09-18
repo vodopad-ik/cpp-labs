@@ -3,8 +3,8 @@
 
 class Array {
 private:
-  int *data;
-  int length;
+  int *data = nullptr;
+  int length = 0;
 
 public:
   Array();
@@ -36,7 +36,7 @@ public:
     }
     return res;
   }
-  
+
   Array &operator=(Array other);
   void fill();
   friend int placeElement(Array &item, int index);

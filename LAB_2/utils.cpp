@@ -46,7 +46,6 @@ int placeElement(Array &item, int index) {
   return item.getData()[index] = input();
 }
 
-// Теперь print использует геттеры
 void print(const Array &item) {
   if (item.getLength() == 0) {
     cout << "\nМассив пуст...\n";
