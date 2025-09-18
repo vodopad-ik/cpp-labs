@@ -4,12 +4,11 @@
 
 using namespace std;
 
-Array::Array() {}
 Array::Array(int size) {
-    if (size > 0) {
-        length = size;
-        data = new int[length]();
-    }
+  if (size > 0) {
+    length = size;
+    data = new int[length]();
+  }
 }
 Array::~Array() {
   delete[] data;
@@ -24,7 +23,7 @@ Array::Array(const Array &other) : length(other.length) {
 }
 
 int Array::getLength() const { return length; }
-int* Array::getData() const { return data; }
+int *Array::getData() const { return data; }
 
 Array &Array::operator=(Array other) {
   if (this != &other) {
@@ -38,10 +37,10 @@ Array &Array::operator=(Array other) {
 }
 
 void Array::fill() {
-    if (data == nullptr || length == 0) {
-        cout << "Ошибка: массив не инициализирован!" << endl;
-        return;
-    }
+  if (data == nullptr || length == 0) {
+    cout << "Ошибка: массив не инициализирован!" << endl;
+    return;
+  }
   cout << "\nПожалуйста заполните массив: \n\n";
   for (int i = 0; i < length; i++) {
     cout << "Введите целое число(элемент[" << i + 1 << "]): ";

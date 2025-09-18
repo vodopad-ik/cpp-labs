@@ -18,7 +18,7 @@ int main() {
   }
   while (choice) {
     iteration < 2 ? printMenu_2() : printMenu_3();
-    switch (choice=input()) {
+    switch (choice = input()) {
     case 0:
       return 0;
     case 1:

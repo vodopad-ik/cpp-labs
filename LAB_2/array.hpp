@@ -7,15 +7,15 @@ private:
   int length = 0;
 
 public:
-  Array();
+  Array() = default;
   explicit Array(int size);
   ~Array();
   Array(const Array &other);
 
   int getLength() const;
   int *getData() const;
-  
- friend Array operator|(const Array &lhs, const Array &rhs) {
+
+  friend Array operator|(const Array &lhs, const Array &rhs) {
     int lhs_len = lhs.getLength();
     int rhs_len = rhs.getLength();
 
@@ -42,4 +42,3 @@ public:
   friend int placeElement(Array &item, int index);
   friend void print(const Array &item);
 };
-
