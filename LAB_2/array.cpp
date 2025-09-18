@@ -4,8 +4,8 @@
 
 using namespace std;
 
-Array::Array() : data(nullptr) {}
-Array::Array(int size) : data(nullptr){
+Array::Array() {}
+Array::Array(int size) {
     if (size > 0) {
         length = size;
         data = new int[length]();
