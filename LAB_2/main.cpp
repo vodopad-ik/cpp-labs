@@ -31,19 +31,19 @@ int main() {
         item2 = Array(length);
         item2.fill();
       } else
-        item3 = item1 | item2; // Возвращен оператор |
+        item3 = item1 | item2;
       break;
     case 2:
       if (iteration == 0)
-        cout << item1;
+        print(item1);
       else if (iteration == 1)
-        cout << item2;
+        print(item2);
       else if (iteration >= 2)
-        cout << item3;
+        print(item3);
       break;
     case 3:
       if (iteration >= 2) {
-        item3 = item2 | item1; // Возвращен оператор |
+        item3 = item2 | item1;
       }
       iteration++;
       break;

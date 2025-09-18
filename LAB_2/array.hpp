@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 class Array {
 private:
@@ -6,42 +7,39 @@ private:
   int length;
 
 public:
-  // Конструктор по умолчанию
   Array();
-
-  // Конструктор с размером
   explicit Array(int size);
-
-  // Деструктор
   ~Array();
-
-  // Конструктор копирования
   Array(const Array &other);
 
-  // Перегруженный оператор | для объединения массивов
-  friend Array operator|(const Array &lhs, const Array &rhs);
-
-  // Перегруженный оператор присваивания с идиомой copy-and-swap
-  Array &operator=(Array other);
-
-  // Заполняет массив данными от пользователя
-  void fill();
-
-  // Дружественные функции для операций ввода-вывода
-  friend std::ostream &operator<<(std::ostream &os, const Array &item);
-  friend std::istream &operator>>(std::istream &is, Array &item);
-  
-  // Геттеры
   int getLength() const;
   int *getData() const;
-<<<<<<< HEAD
-};
-=======
   
-  friend Array operator|(const Array &lhs, const Array &rhs);
+ friend Array operator|(const Array &lhs, const Array &rhs) {
+    int lhs_len = lhs.getLength();
+    int rhs_len = rhs.getLength();
+
+    if (lhs_len == 0)
+      return rhs;
+    if (rhs_len == 0)
+      return lhs;
+    if (lhs.getData() == nullptr || rhs.getData() == nullptr) {
+      return Array();
+    }
+
+    Array res(lhs_len + rhs_len);
+    for (int i = 0; i < lhs.length; i++) {
+      res.data[i] = lhs.data[i];
+    }
+    for (int j = 0; j < rhs.length; j++) {
+      res.data[lhs.length + j] = rhs.data[j];
+    }
+    return res;
+  }
+  
   Array &operator=(Array other);
   void fill();
   friend int placeElement(Array &item, int index);
   friend void print(const Array &item);
 };
->>>>>>> recover-commit
+
