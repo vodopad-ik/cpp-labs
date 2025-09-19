@@ -1,5 +1,5 @@
-#include "matrix.hpp"
-#include "utils.hpp"
+#include "../headers/matrix.hpp"
+#include "../headers/utils.hpp"
 #include <format>
 #include <iostream>
 #include <limits>
@@ -69,7 +69,7 @@ void Matrix::print() const {
   cout << "\nПолученная матрица: \n\n";
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
-      cout << format("{:4} ", data[i][j]);
+      //cout << format("{:4} ", data[i][j]);
     }
     cout << endl;
   }
