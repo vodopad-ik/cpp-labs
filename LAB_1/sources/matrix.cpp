@@ -69,7 +69,7 @@ void Matrix::print() const {
   cout << "\nПолученная матрица: \n\n";
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
-      //cout << format("{:4} ", data[i][j]);
+      cout << " " <<data[i][j];
     }
     cout << endl;
   }
@@ -83,7 +83,7 @@ Matrix Matrix::subtract(const Matrix item) const {
   Matrix result(this->rows, this->cols);
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
-      result.data[i][j] = this->data[i][j] - item.data[i][j];
+      result.data[i][j] = this->data[i][j] + item.data[i][j];
     }
   }
   return result;
