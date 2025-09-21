@@ -1,4 +1,4 @@
-#include "array.hpp"
+#include "../headers/array.hpp"
 #include "utils.hpp"
 #include <iostream>
 

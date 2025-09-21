@@ -1,6 +1,6 @@
-#include "array.hpp"
-#include "menu.hpp"
-#include "utils.hpp"
+#include "../headers/array.hpp"
+#include "../headers/menu.hpp"
+#include "../headers/utils.hpp"
 #include <iostream>
 #include <locale>
 using namespace std;
