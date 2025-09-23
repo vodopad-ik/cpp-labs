@@ -13,9 +13,8 @@ int main() {
   printMenu_1();
   int choice;
   int iteration = 0;
-  while ((choice = input()) != 1 && choice) {
+  while ((choice = input()) != 1 && choice) 
     cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
-  }
   while (choice) {
     iteration < 2 ? printMenu_2() : printMenu_3();
     switch (choice = input()) {
@@ -42,9 +41,8 @@ int main() {
         print(item3);
       break;
     case 3:
-      if (iteration >= 2) {
+      if (iteration >= 2) 
         item3 = item2 | item1;
-      }
       iteration++;
       break;
     default:

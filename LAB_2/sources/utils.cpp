@@ -37,7 +37,6 @@ int positiveInput(const string &message) {
   return value;
 }
 
-// Теперь placeElement использует геттеры
 int placeElement(Array &item, int index) {
   if (index >= item.getLength() || index < 0) {
     cout << "Несуществующая ячейка!!!";
