@@ -39,6 +39,5 @@ public:
 
   Array &operator=(Array other);
   void fill();
-  friend int placeElement(Array &item, int index);
   friend void print(const Array &item);
 };
