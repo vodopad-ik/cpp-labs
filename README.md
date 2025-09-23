@@ -42,24 +42,27 @@
 ## Структура репозитория
 ```📦 cpp-labs/
 ├── 📁 LAB_1/ # Лабораторная работа 1 - Матрицы
+│ ├── 📁 headers/ # Заголовочные файлы
+│ │ ├── 📄 matrix.hpp
+│ │ ├── 📄 menu.hpp
+│ │ └── 📄 utils.hpp
+│ └── 📁 sources/ # Исходные файлы
 │ ├── 📄 main.cpp
-│ ├── 📄 matrix.hpp
 │ ├── 📄 matrix.cpp
-│ ├── 📄 menu.hpp
 │ ├── 📄 menu.cpp
-│ ├── 📄 utils.hpp
 │ └── 📄 utils.cpp
 ├── 📁 LAB_2/ # Лабораторная работа 2 - Массивы
+│ ├── 📁 headers/ # Заголовочные файлы
+│ │ ├── 📄 array.hpp
+│ │ ├── 📄 menu.hpp
+│ │ └── 📄 utils.hpp
+│ └── 📁 sources/ # Исходные файлы
 │ ├── 📄 main.cpp
-│ ├── 📄 array.hpp
 │ ├── 📄 array.cpp
-│ ├── 📄 menu.hpp
 │ ├── 📄 menu.cpp
-│ ├── 📄 utils.hpp
 │ └── 📄 utils.cpp
 ├── 📄 .gitignore # Git ignore файлы
 └── 📄 README.md # Этот файл
-text
 ```
 
 ## Компиляция и запуск
@@ -67,13 +70,13 @@ text
 ### LAB_1 - Матрицы:
 ```bash
 cd LAB_1
-g++ -o lab1 main.cpp matrix.cpp menu.cpp utils.cpp
-./lab1
+g++ -o program sources/main.cpp sources/matrix.cpp sources/menu.cpp sources/utils.cpp -Iheaders
+./program
 ```
 
 ### LAB_2 - Массивы:
 ```bash
 cd LAB_2
-g++ -o lab2 main.cpp array.cpp menu.cpp utils.cpp
-./lab2
+g++ -o program sources/main.cpp sources/array.cpp sources/menu.cpp sources/utils.cpp -Iheaders
+./program
 ```
