@@ -44,8 +44,6 @@ void Array::fill() {
   cout << "\nПожалуйста заполните массив: \n\n";
   for (int i = 0; i < length; i++) {
     cout << "Введите целое число(элемент[" << i + 1 << "]): ";
-    for(int i=0; i<length; i++){
       data[i]=input();
-    } 
   }
 }
