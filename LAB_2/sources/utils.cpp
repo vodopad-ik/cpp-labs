@@ -37,14 +37,6 @@ int positiveInput(const string &message) {
   return value;
 }
 
-int placeElement(Array &item, int index) {
-  if (index >= item.getLength() || index < 0) {
-    cout << "Несуществующая ячейка!!!";
-    return 0;
-  }
-  return item.getData()[index] = input();
-}
-
 void print(const Array &item) {
   if (item.getLength() == 0) {
     cout << "\nМассив пуст...\n";
