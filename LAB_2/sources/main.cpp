@@ -37,16 +37,13 @@ int main() {
         print(item1);
       else if (iteration == 1)
         print(item2);
-      else if (iteration >= 2 && item3.getLength()) {
-        print(item3);
-        return 0;
-      }
-      else if (iteration >= 2) 
+      else if (iteration >= 2)
         print(item3);
       break;
     case 3:
-      if (iteration++ >= 2)
-        cout << "Выберите один из вариантов, представленных в меню!!!\n";
+      if (iteration >= 2)
+        item3 = item2 | item1;
+      iteration++;
       break;
     default:
       cout << "Выберите один из вариантов, представленных в меню!!!\n";
