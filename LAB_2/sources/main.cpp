@@ -13,7 +13,7 @@ int main() {
   printMenu_1();
   int choice;
   int iteration = 0;
-  while ((choice = input()) != 1 && choice) 
+  while ((choice = input()) != 1 && choice)
     cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
   while (choice) {
     iteration < 2 ? printMenu_2() : printMenu_3();
@@ -37,13 +37,16 @@ int main() {
         print(item1);
       else if (iteration == 1)
         print(item2);
-      else if (iteration >= 2)
+      else if (iteration >= 2 && item3.getLength()) {
+        print(item3);
+        return 0;
+      }
+      else if (iteration >= 2) 
         print(item3);
       break;
     case 3:
-      if (iteration >= 2) 
-        item3 = item2 | item1;
-      iteration++;
+      if (iteration++ >= 2)
+        cout << "Выберите один из вариантов, представленных в меню!!!\n";
       break;
     default:
       cout << "Выберите один из вариантов, представленных в меню!!!\n";
