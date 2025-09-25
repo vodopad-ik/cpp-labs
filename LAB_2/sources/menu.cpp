@@ -1,4 +1,4 @@
-#include "../headers/menu.hpp"
+#include "menu.hpp"
 #include <iostream>
 using namespace std;
 
