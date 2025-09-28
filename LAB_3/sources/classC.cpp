@@ -6,7 +6,7 @@
 using namespace std;
 
 C::C(double a_val, double b_val, double c_val)
-    : B(a_val, b_val), c(c_val), x1(0), x2(0) {}
+    : B(a_val, b_val), c(c_val) {}
 void C::setC(double val) { c = val; }
 double C::getC() const { return c; }
 void C::printEquation() const {
@@ -29,7 +29,7 @@ void C::printComplex(const complex<double> &z) const {
   cout << endl;
 }
 
-void C::solve() {
+void C::solve() const {
   double a = getA();
   double b = getB();
   double D = b * b - 4 * a * c;
