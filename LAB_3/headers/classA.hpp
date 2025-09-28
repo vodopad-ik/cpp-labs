@@ -1,7 +1,7 @@
 #pragma once
 
 class A {
-protected:
+private:
   double a;
 
 public:

@@ -10,11 +10,13 @@ C::C(double a_val, double b_val, double c_val)
 void C::setC(double val) { c = val; }
 double C::getC() const { return c; }
 void C::printEquation() const {
+  double a = getA();
+  double b = getB();
   cout << a << "x^2" << (b > 0 ? " + " : " - ") << abs(b) << 'x'
        << (c > 0 ? " + " : " - ") << abs(c) << " = 0" << endl;
 }
 
-void C::printComplex(const complex<double> &z) {
+void C::printComplex(const complex<double> &z) const {
   double re = z.real();
   double im = z.imag();
 
@@ -28,6 +30,8 @@ void C::printComplex(const complex<double> &z) {
 }
 
 void C::solve() {
+  double a = getA();
+  double b = getB();
   double D = b * b - 4 * a * c;
   cout << "\nРешение уравнения: ";
   printEquation();

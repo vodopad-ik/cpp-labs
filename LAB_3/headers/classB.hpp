@@ -2,7 +2,7 @@
 #include "classA.hpp"
 
 class B : public A {
-protected:
+private:
   double b;
 
 public:
