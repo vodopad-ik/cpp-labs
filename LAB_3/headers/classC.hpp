@@ -6,8 +6,8 @@
 class C : public B {
 private:
   double c;
-  double x1 = 0;
-  double x2 = 0;
+  std::complex<double> x1;
+  std::complex<double> x2;
 
 public:
   explicit C(double a_val = 1.0, double b_val = 0.0, double c_val = 0.0);
@@ -15,5 +15,5 @@ public:
   double getC() const;
   void printEquation() const;
   void printComplex(const std::complex<double> &z) const;
-  void solve() const;
+  void solve();
 };

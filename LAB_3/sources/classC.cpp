@@ -5,8 +5,7 @@
 #include <iostream>
 using namespace std;
 
-C::C(double a_val, double b_val, double c_val)
-    : B(a_val, b_val), c(c_val) {}
+C::C(double a_val, double b_val, double c_val) : B(a_val, b_val), c(c_val) {}
 void C::setC(double val) { c = val; }
 double C::getC() const { return c; }
 void C::printEquation() const {
@@ -29,7 +28,7 @@ void C::printComplex(const complex<double> &z) const {
   cout << endl;
 }
 
-void C::solve() const {
+void C::solve() {
   double a = getA();
   double b = getB();
   double D = b * b - 4 * a * c;
@@ -42,18 +41,22 @@ void C::solve() const {
   }
 
   if (D > 0) {
-    double x1 = (-b + sqrt(D)) / (2 * a);
-    double x2 = (-b - sqrt(D)) / (2 * a);
+    x1 = complex<double>((-b + sqrt(D)) / (2 * a), 0);
+    x2 = complex<double>((-b - sqrt(D)) / (2 * a), 0);
     cout << "Два действительных корня:\n";
-    cout << "x1 = " << x1 << "\n";
-    cout << "x2 = " << x2 << "\n";
+    cout << "x1 = ";
+    printComplex(x1);
+    cout << "x2 = ";
+    printComplex(x2);
   } else if (D == 0) {
-    double x = -b / (2 * a);
-    cout << "Один действительный корень: x = " << x << "\n";
+    x1 = x2 = complex<double>((-b / (2 * a)), 0);
+    cout << "Один действительный корень:\n";
+    cout << "x = ";
+    printComplex(x1);
   } else {
     complex<double> sqrtD = sqrt(complex<double>(D, 0));
-    complex<double> x1 = (-b + sqrtD) / (2.0 * a);
-    complex<double> x2 = (-b - sqrtD) / (2.0 * a);
+    x1 = (-b + sqrtD) / (2.0 * a);
+    x2 = (-b - sqrtD) / (2.0 * a);
     cout << "Два комплексных корня:\n";
     cout << "x1 = ";
     printComplex(x1);
