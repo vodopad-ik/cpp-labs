@@ -25,6 +25,30 @@ Array::Array(const Array &other) : length(other.length) {
 int Array::getLength() const { return length; }
 int *Array::getData() const { return data; }
 
+Array Array::createUniqueArray(Array &unique) const {
+  for (int i = 0; i < length; i++) {
+    bool exists = false;
+    for (int j = 0; j < unique.count; j++) {
+      if (unique.data[j] == data[i]) {
+        exists = true;
+        break;
+      }
+    }
+    if (!exists)
+      unique.data[unique.count++] = data[i];
+  }
+  return unique;
+}
+
+int Array::countRepeatingElements(int val) const {
+  int repetitions = 0;
+  for (int i = 0; i < length; i++) {
+    if (data[i] == val)
+      repetitions++;
+  }
+  return repetitions;
+}
+
 Array &Array::operator=(Array other) {
   if (this != &other) {
     delete[] data;
@@ -46,4 +70,5 @@ void Array::fill() {
     cout << "Введите целое число(элемент[" << i + 1 << "]): ";
     data[i] = input();
   }
+  count = length;
 }
