@@ -9,10 +9,12 @@ private:
 
 public:
   Mammal(const string &name, int age);
-  virtual ~Mammal() = default; 
+  Mammal(Mammal &&) noexcept = default;
+  Mammal &operator=(Mammal &&) noexcept = default;
+  virtual ~Mammal() = default;
   string getName() const;
   int getAge() const;
   void setAge(int value);
-  string getAgeStr()const ;
+  string getAgeStr() const;
   virtual void describe() const = 0;
 };

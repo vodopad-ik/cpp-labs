@@ -6,8 +6,10 @@ private:
   double weight;
 
 public:
-  Animal(const string& name, int age, double weight);
+  Animal(const string &name, int age, double weight);
+  Animal(Animal &&) noexcept = default;
+  Animal &operator=(Animal &&) noexcept = default;
   double getWeight() const;
   void setWeight(double value);
-  virtual void voice()const;
+  virtual void voice() const;
 };
