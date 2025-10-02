@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-using namespace std;
+using std::string;
 
 class Mammal {
 private:
@@ -13,5 +13,6 @@ public:
   string getName() const;
   int getAge() const;
   void setAge(int value);
+  const string getAgeStr()const ;
   virtual void describe() const = 0;
 };

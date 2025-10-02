@@ -1,7 +1,6 @@
 #pragma once
 #include "animal.hpp"
 #include <string>
-using namespace std;
 
 class Cat : public Animal {
 private:

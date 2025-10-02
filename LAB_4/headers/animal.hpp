@@ -9,5 +9,5 @@ public:
   Animal(const string& name, int age, double weight);
   double getWeight() const;
   void setWeight(double value);
-  void voice()const;
+  virtual void voice()const;
 };

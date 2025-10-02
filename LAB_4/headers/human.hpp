@@ -1,7 +1,6 @@
 #pragma once
 #include "mammal.hpp"
 #include <string>
-using namespace std;
 
 class Human : public Mammal {
 private:

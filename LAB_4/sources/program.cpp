@@ -2,8 +2,9 @@
 #include "menu.hpp"
 #include "utils.hpp"
 #include <iostream>
+using std::cout;
 
-Human Program::useObjectHuman() {
+Human Program::useObjectHuman() const {
   const string name = inputOnlyLetters("Введите имя человека: ");
   int age = positiveInputInteger("Введите возраст: ");
   const string status = inputOnlyLetters(
@@ -14,7 +15,7 @@ Human Program::useObjectHuman() {
   return person;
 }
 
-Dog Program::useObjectDog() {
+Dog Program::useObjectDog() const {
   const string name = inputOnlyLetters("Введите имя собачки/песика: ");
   int age = positiveInputInteger("Введите возраст: ");
   double weight = positiveInputDouble("Введите вес(кг): ");
@@ -25,7 +26,7 @@ Dog Program::useObjectDog() {
   dog.describe();
   return dog;
 }
-Cat Program::useObjectCat() {
+Cat Program::useObjectCat() const {
   const string name = inputOnlyLetters("Введите имя котика/кошки: ");
   int age = positiveInputInteger("Введите возраст: ");
   double weight = positiveInputDouble("Введите вес(кг): ");
@@ -38,7 +39,7 @@ Cat Program::useObjectCat() {
 bool Program::run(int choice) {
   switch (choice) {
   case 0:
-    return 0;
+    return false;
   case 1: {
     useObjectHuman();
     printMenu_1();
@@ -57,7 +58,7 @@ bool Program::run(int choice) {
         cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
       }
       if (!choice)
-        return 0;
+        return false;
       else if (choice == 1)
         dog.voice();
       else
@@ -72,7 +73,7 @@ bool Program::run(int choice) {
         cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
       }
       if (!choice)
-        return 0;
+        return false;
       else if (choice == 1)
         cat.voice();
       else

@@ -2,6 +2,7 @@
 #include "utils.hpp"
 #include "consts.hpp"
 #include <iostream>
+using std::cout;
 
 Cat::Cat(const string &name, int age, double weight, const string &color)
     : Animal(name, age, weight), color(color) {}
@@ -9,14 +10,10 @@ string Cat::getColor() const { return color; }
 void Cat::voice() const { cout << "Мяу-мяу!\n"; }
 void Cat::describe() const {
   clearScreen();
-  int age = getAge();
-  const string age_str =
-      to_string(age) +
-      ((age % 10 <= 4 && age % 10 >= 1 && age > 20) ? " год(а)." : " лет.");
   cout << SOLID_LINE;
   cout << " INFO: " << getName() << '\n';
   cout <<BROKEN_LINE;
-  cout << " Возраст составляет " << age_str << "\n";
+  cout << " Возраст составляет " << getAgeStr() << "\n";
   cout << " Цвет шерсти: " << color << ".\n";
   cout << " Вес составляет " << getWeight() << " кг.\n";
   cout << SOLID_LINE;

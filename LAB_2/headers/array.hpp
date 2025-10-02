@@ -37,9 +37,9 @@ public:
       int repeat_arr1 = arr1.countRepeatingElements(val);
       int repeat_arr2 = arr2.countRepeatingElements(val);
 
-      int count = (repeat_arr1 > repeat_arr2) ? repeat_arr1 : repeat_arr2;
+      int max_repeat = (repeat_arr1 > repeat_arr2) ? repeat_arr1 : repeat_arr2;
 
-      for (int c = 0; c < count; c++)
+      for (int c = 0; c < max_repeat; c++)
         res.data[res.count++] = val;
     }
 
