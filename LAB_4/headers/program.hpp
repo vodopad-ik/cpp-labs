@@ -2,7 +2,7 @@
 #include "cat.hpp"
 #include "dog.hpp"
 #include "human.hpp"
-
+#include "menu.hpp"
 class Program {
 private:
   Human useObjectHuman() const;

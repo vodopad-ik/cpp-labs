@@ -1,7 +1,3 @@
-#include "cat.hpp"
-#include "dog.hpp"
-#include "human.hpp"
-#include "menu.hpp"
 #include "program.hpp"
 #include "utils.hpp"
 #include <iostream>

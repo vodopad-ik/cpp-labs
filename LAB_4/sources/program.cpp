@@ -1,5 +1,4 @@
 #include "program.hpp"
-#include "menu.hpp"
 #include "utils.hpp"
 #include <iostream>
 using std::cout;
@@ -43,9 +42,8 @@ bool Program::run(int choice) const{
   case 1: {
     useObjectHuman();
     printMenu_1();
-    while ((choice = inputInteger()) != 0 && choice != 1) {
+    while ((choice = inputInteger()) != 0 && choice != 1) 
       cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
-    }
     if (!choice)
       return false;
     break;
@@ -54,9 +52,8 @@ bool Program::run(int choice) const{
     Dog dog = useObjectDog();
     while (true) {
       printMenu_2();
-      while ((choice = inputInteger()) < 0 || choice > 2) {
+      while ((choice = inputInteger()) < 0 || choice > 2)
         cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
-      }
       if (!choice)
         return false;
       else if (choice == 1)
@@ -69,9 +66,8 @@ bool Program::run(int choice) const{
     Cat cat = useObjectCat();
     while (true) {
       printMenu_3();
-      while ((choice = inputInteger()) < 0 || choice > 2) {
+      while ((choice = inputInteger()) < 0 || choice > 2)
         cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
-      }
       if (!choice)
         return false;
       else if (choice == 1)
