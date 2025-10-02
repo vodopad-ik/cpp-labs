@@ -4,7 +4,7 @@
 
 class Dog : public Animal {
 private:
-  const string breed;
+  string breed;
 
 public:
   Dog(const string &name, int age, double weight, const string& breed);

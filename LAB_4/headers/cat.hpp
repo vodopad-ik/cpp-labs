@@ -4,7 +4,7 @@
 
 class Cat : public Animal {
 private:
-  const string color;
+  string color;
 
 public:
   Cat(const string &name, int age, double weight, const string &color);
