@@ -36,7 +36,7 @@ Cat Program::useObjectCat() const {
   return cat;
 }
 
-bool Program::run(int choice) {
+bool Program::run(int choice) const{
   switch (choice) {
   case 0:
     return false;

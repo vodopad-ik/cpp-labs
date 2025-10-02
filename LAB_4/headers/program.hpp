@@ -10,5 +10,5 @@ private:
   Cat useObjectCat() const;
 
 public:
-  bool run(int choice);
+  bool run(int choice) const;
 };

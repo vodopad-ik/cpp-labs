@@ -1,6 +1,7 @@
 #pragma once
 #include "mammal.hpp"
 #include <string>
+#include <string_view>
 
 class Human : public Mammal {
 private:
@@ -9,6 +10,6 @@ private:
 public:
   Human(const string &name, int age, const string &status);
   string getStatus() const;
-  void setStatus(const string &value);
+  void setStatus(std::string_view value);
   void describe() const override;
 };

@@ -9,6 +9,6 @@ private:
 public:
   Dog(const string &name, int age, double weight, const string& breed);
   string getBreed() const;
-  void voice()const;
+ void voice() const override;
   void describe() const override;
 };

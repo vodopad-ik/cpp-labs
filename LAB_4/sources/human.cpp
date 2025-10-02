@@ -1,13 +1,13 @@
 #include "human.hpp"
 #include "utils.hpp"
 #include "consts.hpp"
-#include <iostream>
+#include <iostream> 
 using std::cout;
 
 Human::Human(const string &name, int age, const string &status)
     : Mammal(name, age), status(status) {}
 string Human::getStatus() const { return status; }
-void Human::setStatus(const string &value) { status = value; }
+void Human::setStatus(std::string_view value) { status = value; }
 void Human::describe() const {
   clearScreen();
   cout << SOLID_LINE;
