@@ -94,5 +94,4 @@ bool Program::run(int choice) const {
     cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
     return true;
   }
-  return true;
 }
