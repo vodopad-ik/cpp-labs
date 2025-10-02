@@ -8,7 +8,7 @@ private:
   string status;
 
 public:
-  Human(const string &name, int age, const string &status);
+  Human(const string &name, int age, const string &status); 
   string getStatus() const;
   void setStatus(std::string_view value);
   void describe() const override;
