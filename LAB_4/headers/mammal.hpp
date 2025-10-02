@@ -4,7 +4,7 @@ using std::string;
 
 class Mammal {
 private:
-  const string name;
+  string name;
   int age;
 
 public:
@@ -13,6 +13,6 @@ public:
   string getName() const;
   int getAge() const;
   void setAge(int value);
-  const string getAgeStr()const ;
+  string getAgeStr()const ;
   virtual void describe() const = 0;
 };
