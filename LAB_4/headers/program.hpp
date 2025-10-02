@@ -9,6 +9,12 @@ private:
   Dog useObjectDog() const;
   Cat useObjectCat() const;
 
+  bool handleHumanCase() const;
+  bool handleDogCase() const;
+  bool handleCatCase() const;
+
+  int getValidChoice(int min, int max) const;
+
 public:
   bool run(int choice) const;
 };

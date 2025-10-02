@@ -35,47 +35,61 @@ Cat Program::useObjectCat() const {
   return cat;
 }
 
-bool Program::run(int choice) const{
+bool Program::handleHumanCase() const {
+  useObjectHuman();
+  printMenu_1();
+  int choice = getValidChoice(0, 1);
+  return choice != 0;
+}
+
+bool Program::handleDogCase() const {
+  Dog dog = useObjectDog();
+  while (true) {
+    printMenu_2();
+    int choice = getValidChoice(0, 2);
+    if (!choice)
+      return false;
+    if (choice == 1)
+      dog.voice();
+    else
+      return true;
+  }
+}
+
+bool Program::handleCatCase() const {
+  Cat cat = useObjectCat();
+
+  while (true) {
+    printMenu_3();
+    int choice = getValidChoice(0, 2);
+
+    if (!choice)
+      return false;
+    if (choice == 1)
+      cat.voice();
+    else
+      return true;
+  }
+}
+
+int Program::getValidChoice(int min, int max) const {
+  int choice;
+  while ((choice = inputInteger()) < min || choice > max) {
+    cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
+  }
+  return choice;
+}
+
+bool Program::run(int choice) const {
   switch (choice) {
   case 0:
     return false;
-  case 1: {
-    useObjectHuman();
-    printMenu_1();
-    while ((choice = inputInteger()) != 0 && choice != 1) 
-      cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
-    if (!choice)
-      return false;
-    break;
-  }
-  case 2: {
-    Dog dog = useObjectDog();
-    while (true) {
-      printMenu_2();
-      while ((choice = inputInteger()) < 0 || choice > 2)
-        cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
-      if (!choice)
-        return false;
-      else if (choice == 1)
-        dog.voice();
-      else
-        return true;
-    }
-  }
-  case 3: {
-    Cat cat = useObjectCat();
-    while (true) {
-      printMenu_3();
-      while ((choice = inputInteger()) < 0 || choice > 2)
-        cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
-      if (!choice)
-        return false;
-      else if (choice == 1)
-        cat.voice();
-      else
-        return true;
-    }
-  }
+  case 1: 
+    return handleHumanCase();
+  case 2: 
+   return handleDogCase();
+  case 3: 
+  return handleCatCase();
   default:
     cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
     return true;
