@@ -94,7 +94,7 @@ string inputOnlyLetters(const string &message) {
     bool hasMeaningfulChars = false; 
 
     for (char c : str) {
-      if (c == ' ') 
+      if (c == ' ' || c == '-') 
           continue; 
       
       if (isdigit(c) || ispunct(c)) { 
