@@ -28,35 +28,52 @@ void C::printComplex(const complex<double> &z) const {
   cout << endl;
 }
 
+double C::searchDiscrimen() {
+  double a = getA();
+  double b = getB();
+  return b * b - 4 * a * c;
+}
 void C::solve() {
   double a = getA();
   double b = getB();
-  double D = b * b - 4 * a * c;
-  cout << "\nРешение уравнения: ";
-  printEquation();
-  cout << "Дискриминант D = " << D << endl;
-  if (a == 0) {
-    cout << "Это не квадратное уравнение (a=0).\n";
+  double D = searchDiscrimen();
+  if (a == 0)
     return;
-  }
 
   if (D > 0) {
     x1 = complex<double>((-b + sqrt(D)) / (2 * a), 0);
     x2 = complex<double>((-b - sqrt(D)) / (2 * a), 0);
+  } else if (D == 0) {
+    x1 = x2 = complex<double>((-b / (2 * a)), 0);
+  } else {
+    complex<double> sqrtD = sqrt(complex<double>(D, 0));
+    x1 = (-b + sqrtD) / (2.0 * a);
+    x2 = (-b - sqrtD) / (2.0 * a);
+    is_solve = true;
+  }
+}
+
+void C::printSolve() {
+  cout << "\nРешение уравнения: ";
+  printEquation();
+  if (getA() == 0) {
+    cout << "Это не квадратное уравнение (a=0).\n";
+    return;
+  }
+   if(is_solve==false) return;
+  double D = searchDiscrimen();
+  cout << "Дискриминант D = " << D << endl;
+  if (D > 0) {
     cout << "Два действительных корня:\n";
     cout << "x1 = ";
     printComplex(x1);
     cout << "x2 = ";
     printComplex(x2);
   } else if (D == 0) {
-    x1 = x2 = complex<double>((-b / (2 * a)), 0);
     cout << "Один действительный корень:\n";
     cout << "x = ";
     printComplex(x1);
   } else {
-    complex<double> sqrtD = sqrt(complex<double>(D, 0));
-    x1 = (-b + sqrtD) / (2.0 * a);
-    x2 = (-b - sqrtD) / (2.0 * a);
     cout << "Два комплексных корня:\n";
     cout << "x1 = ";
     printComplex(x1);

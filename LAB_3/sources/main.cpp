@@ -15,5 +15,6 @@ int main() {
   double c = input("Введите коэффициент c: ");
   C equation(a, b, c);
   equation.solve();
+  equation.printSolve();
   return 0;
 }
