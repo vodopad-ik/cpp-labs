@@ -7,6 +7,7 @@
 ## Статус анализа кода
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vodopad-ik_cpp-labs&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=vodopad-ik_cpp-labs)
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=vodopad-ik_cpp-labs&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=vodopad-ik_cpp-labs)
+
 <details>
 <summary style="cursor: pointer; font-weight: bold;">📁 LAB_1 - Работа с матрицами</summary>
 
@@ -39,44 +40,78 @@
 
 </details>
 
+<details>
+<summary style="cursor: pointer; font-weight: bold;">📁 LAB_3 - Иерархия классов для решения квадратных уравнений</summary>
+
+### Задание:
+Разработать иерархию классов для нахождения корней квадратного уравнения ax²+bx+c=0. А – базовый для класса В, В – базовый для класса С. Компоненты классов А,В,С – коэффициенты a, b, c. Корни уравнения и методы решения находятся в классе С.
+
+### Требования:
+- Трехуровневая иерархия классов (A → B → C)
+- Коэффициенты a, b, c как компоненты классов
+- Методы решения уравнения в классе C
+- Вычисление и хранение корней уравнения
+- Обработка различных случаев (комплексные корни, вырожденные уравнения)
+
+</details>
+
+<details>
+<summary style="cursor: pointer; font-weight: bold;">📁 LAB_4 - Иерархия классов "Млекопитающие"</summary>
+
+### Задание:
+Создать абстрактный класс млекопитающие. Определить производные классы животные и люди. У животных определить производные классы собак и котов. Определить виртуальные функции описания человека, собаки и кота.
+
+### Требования:
+- Абстрактный базовый класс Mammal
+- Производные классы Animal и Human
+- Производные классы Dog и Cat от Animal
+- Виртуальные функции для описания объектов
+- Полиморфное поведение через указатели на базовый класс
+
+</details>
+
 ## Структура репозитория
+
 ```📦 cpp-labs/
 ├── 📁 LAB_1/ # Лабораторная работа 1 - Матрицы
-│ ├── 📁 headers/ # Заголовочные файлы
+│ ├── 📁 headers/
 │ │ ├── 📄 matrix.hpp
 │ │ ├── 📄 menu.hpp
 │ │ └── 📄 utils.hpp
-│ └── 📁 sources/ # Исходные файлы
+│ └── 📁 sources/
 │ ├── 📄 main.cpp
 │ ├── 📄 matrix.cpp
 │ ├── 📄 menu.cpp
 │ └── 📄 utils.cpp
 ├── 📁 LAB_2/ # Лабораторная работа 2 - Массивы
-│ ├── 📁 headers/ # Заголовочные файлы
+│ ├── 📁 headers/
 │ │ ├── 📄 array.hpp
 │ │ ├── 📄 menu.hpp
 │ │ └── 📄 utils.hpp
-│ └── 📁 sources/ # Исходные файлы
+│ └── 📁 sources/
 │ ├── 📄 main.cpp
 │ ├── 📄 array.cpp
 │ ├── 📄 menu.cpp
 │ └── 📄 utils.cpp
+├── 📁 LAB_3/ # Лабораторная работа 3 - Квадратные уравнения
+│ ├── 📁 headers/
+│ │ ├── 📄 equation.hpp
+│ │ ├── 📄 menu.hpp
+│ │ └── 📄 utils.hpp
+│ └── 📁 sources/
+│ ├── 📄 main.cpp
+│ ├── 📄 equation.cpp
+│ ├── 📄 menu.cpp
+│ └── 📄 utils.cpp
+├── 📁 LAB_4/ # Лабораторная работа 4 - Млекопитающие
+│ ├── 📁 headers/
+│ │ ├── 📄 mammals.hpp
+│ │ ├── 📄 menu.hpp
+│ │ └── 📄 utils.hpp
+│ └── 📁 sources/
+│ ├── 📄 main.cpp
+│ ├── 📄 mammals.cpp
+│ ├── 📄 menu.cpp
+│ └── 📄 utils.cpp
 ├── 📄 .gitignore # Git ignore файлы
-└── 📄 README.md # Этот файл
-```
-
-## Компиляция и запуск
-
-### LAB_1 - Матрицы:
-```bash
-cd LAB_1
-g++ -o program sources/main.cpp sources/matrix.cpp sources/menu.cpp sources/utils.cpp -Iheaders
-./program
-```
-
-### LAB_2 - Массивы:
-```bash
-cd LAB_2
-g++ -o program sources/main.cpp sources/array.cpp sources/menu.cpp sources/utils.cpp -Iheaders
-./program
-```
+└── 📄 README.md # Этот файл```
