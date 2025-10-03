@@ -28,7 +28,7 @@ void C::printComplex(const complex<double> &z) const {
   cout << endl;
 }
 
-double C::searchDiscrimen() {
+double C::searchDiscrimen() const {
   double a = getA();
   double b = getB();
   return b * b - 4 * a * c;
@@ -49,18 +49,19 @@ void C::solve() {
     complex<double> sqrtD = sqrt(complex<double>(D, 0));
     x1 = (-b + sqrtD) / (2.0 * a);
     x2 = (-b - sqrtD) / (2.0 * a);
-    is_solve = true;
   }
+  is_solve = true;
 }
 
-void C::printSolve() {
+void C::printSolve() const {
   cout << "\nРешение уравнения: ";
   printEquation();
   if (getA() == 0) {
     cout << "Это не квадратное уравнение (a=0).\n";
     return;
   }
-   if(is_solve==false) return;
+  if (is_solve == false)
+    return;
   double D = searchDiscrimen();
   cout << "Дискриминант D = " << D << endl;
   if (D > 0) {

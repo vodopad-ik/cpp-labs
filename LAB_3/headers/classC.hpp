@@ -16,7 +16,7 @@ public:
   double getC() const;
   void printEquation() const;
   void printComplex(const std::complex<double> &z) const;
-  double searchDiscrimen();
+  double searchDiscrimen()const ;
   void solve();
-  void printSolve();
+  void printSolve()const;
 };
