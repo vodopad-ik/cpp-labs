@@ -5,7 +5,7 @@ using std::cout;
 
 Human Program::useObjectHuman() const {
   const string name = inputOnlyLetters("Введите имя человека: ");
-  int age = positiveInputInteger("Введите возраст: ");
+  int age = positiveInputInteger("Введите возраст: ", 150, "Внимание! Введите корректное значение, т.к. люди столько не живут. ");
   const string status = inputOnlyLetters(
       "Введите социальный статус человека (например, школьник, сотрудник, "
       "пенсионер и т.п.): ");
@@ -16,8 +16,8 @@ Human Program::useObjectHuman() const {
 
 Dog Program::useObjectDog() const {
   const string name = inputOnlyLetters("Введите имя собачки/песика: ");
-  int age = positiveInputInteger("Введите возраст: ");
-  double weight = positiveInputDouble("Введите вес(кг): ");
+  int age = positiveInputInteger("Введите возраст: ", 40, "Внимание! Введите корректоное значение, т. к. данный возраст не допустим для данного объекта. ");
+  double weight = positiveInputDouble("Введите вес(кг): ", 155.6, "Внимание! Введите корректное значение, т. к. данный вес не допустим для данного объекта. ");
   const string breed =
       inputOnlyLetters("Введите его породу (например, бульдог, хаски, "
                        "ретривер и т.п.): ");
@@ -27,8 +27,8 @@ Dog Program::useObjectDog() const {
 }
 Cat Program::useObjectCat() const {
   const string name = inputOnlyLetters("Введите имя котика/кошки: ");
-  int age = positiveInputInteger("Введите возраст: ");
-  double weight = positiveInputDouble("Введите вес(кг): ");
+  int age = positiveInputInteger("Введите возраст: ", 40, "Внимание! Введите корректное значение, т. к. данный возраст не допустим для данного объекта. ");
+  double weight = positiveInputDouble("Введите вес(кг): ", 22.5, "Внимание! Введите корректное значение, т. к. данный вес не допустим для данного объекта. ");
   const string color = inputOnlyLetters("Введите оттенок шерсти: ");
   Cat cat(name, age, weight, color);
   cat.describe();
