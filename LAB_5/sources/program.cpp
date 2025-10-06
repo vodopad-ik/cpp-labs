@@ -76,9 +76,6 @@ bool Program::run(int choice) {
   case 2:
     return useTypeArr<double>(inputDouble);
   case 3:
-    return useTypeArr<char>(
-        [](const string &msg) { return inputChar(msg); });
-  case 4:
     return useTypeArr<string>(
         [](const string &msg) { return inputString(msg); });
   default:

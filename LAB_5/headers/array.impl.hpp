@@ -83,7 +83,7 @@ template <class T> void Array<T>::fill(const T &value, size_t index) {
     setLength(new_length);
   }
   if (index >= length)
-    (*this)[length - 1] = value;
+   cout << "Элемент с индексом " << index << " не существует...\n";
   else
     (*this)[index] = value;
 }
@@ -107,6 +107,7 @@ template <class T> void Array<T>::print(size_t index) const {
     cout << "\nМассив пуст...\n";
     return;
   } else if (index >= length)
-    cout << "Элемент с индексом " << index << " не существует...";
-  cout << "arr[" << index << "] = " << (*this)[index] << endl;
+    cout << "Элемент с индексом " << index << " не существует...\n";
+  else
+    cout << "arr[" << index << "] = " << (*this)[index] << endl;
 }

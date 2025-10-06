@@ -67,23 +67,6 @@ size_t inputSize(const string &message, bool allowZero) {
   }
 }
 
-char inputChar(const string &message) {
-  if (!message.empty())
-    cout << message;
-
-  char ch;
-  while (true) {
-    cin >> ch;
-    if (cin.fail() || cin.peek() != '\n') {
-      cout << "Некорректный ввод. Пожалуйста, введите только один символ: ";
-      clearInputBuffer();
-    } else {
-      clearInputBuffer();
-      return ch;
-    }
-  }
-}
-
 template <class T, class InputFunc>
 T positiveInput(
     const string &message, T max_value = 0, const string &errorMessage = "",
@@ -131,16 +114,4 @@ string inputString(const string &message) {
     else
       return str;
   }
-}
-
-string inputOnlyLetters(const string &message) {
-  string str = inputString(message);
-  for (char c : str) {
-    if (!isalpha(c) && c != ' ' && c != '-') {
-      cout << "Строка должна содержать только буквы, пробелы и дефисы. "
-              "Попробуйте снова: ";
-      return inputOnlyLetters();
-    }
-  }
-  return str;
 }

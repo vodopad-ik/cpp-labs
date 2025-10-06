@@ -14,6 +14,4 @@ int positiveInputInteger(
 double positiveInputDouble(
     const string &message = "", double max_value = 0.0,
     const string &errorMessage = "Внимание! Введите положительное число: ");
-char inputChar(const string &message = "");
 string inputString(const string &message = "");
-string inputOnlyLetters(const string &message = "");
