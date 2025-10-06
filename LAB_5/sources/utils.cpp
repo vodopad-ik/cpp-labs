@@ -18,9 +18,9 @@ void clearScreen() {
 #endif
 }
 
-template <typename T>
+template <class T>
 T inputNumber(const string &message, const string &errorMsg) {
-  if (!message.empty()) 
+  if (!message.empty())
     cout << message;
 
   T number;
@@ -84,19 +84,25 @@ char inputChar(const string &message) {
   }
 }
 
-template <typename T>
-T positiveInput(const string &message, T max_value, const string &errorMessage,
-                T (*inputFunc)(const string &)) {
+template <class T, class InputFunc>
+T positiveInput(
+    const string &message, T max_value = 0, const string &errorMessage = "",
+    InputFunc inputFunc = [](const string &msg) {
+      cout << msg;
+      T value;
+      cin >> value;
+      return value;
+    }) {
+
   T value;
   do {
     value = inputFunc(message);
-
     if (value <= 0)
       cout << "Внимание! Введите положительное число: ";
     else if (max_value > 0 && value > max_value)
       cout << errorMessage;
-
   } while (value <= 0 || (max_value > 0 && value > max_value));
+
   return value;
 }
 

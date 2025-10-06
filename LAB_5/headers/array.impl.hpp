@@ -5,9 +5,8 @@
 #include <iostream>
 using std::cout, std::endl;
 
-template <class T> Array<T>::Array(size_t length) : length(length) {
-  data = new T[length]();
-}
+template <class T>
+Array<T>::Array(size_t length) : length(length), data(new T[length]()) {}
 
 template <class T> Array<T>::Array(const Array &other) : length(other.length) {
   data = new T[length];
@@ -66,7 +65,7 @@ template <class T> size_t Array<T>::getLength() const { return length; }
 template <class T> void Array<T>::setLength(size_t new_length) {
   if (new_length == length)
     return;
-  T *new_data = new T[new_length]();
+  auto new_data = new T[new_length]();
   size_t min_length = (new_length < length) ? new_length : length;
   for (size_t i = 0; i < min_length; i++)
     new_data[i] = data[i];
@@ -78,8 +77,9 @@ template <class T> void Array<T>::setLength(size_t new_length) {
 
 template <class T> void Array<T>::fill(const T &value, size_t index) {
   if (!data || !length) {
-    size_t new_length = inputSize("Внимание! Массив не инициализирован. Введите "
-                                "размер массива, чтобы продолжить: ");
+    size_t new_length =
+        inputSize("Внимание! Массив не инициализирован. Введите "
+                  "размер массива, чтобы продолжить: ");
     setLength(new_length);
   }
   if (index >= length)
@@ -88,25 +88,25 @@ template <class T> void Array<T>::fill(const T &value, size_t index) {
     (*this)[index] = value;
 }
 
-  template <class T> void Array<T>::print() const {
-    if (!data) {
-      cout << "\nМассив пуст...\n";
-      return;
-    }
-    cout << "[";
-    for (size_t i = 0; i < length; i++) {
-      cout << (*this)[i];
-      if (i < length - 1)
-        cout << ", ";
-    }
-    cout << "]" << endl;
+template <class T> void Array<T>::print() const {
+  if (!data) {
+    cout << "\nМассив пуст...\n";
+    return;
   }
+  cout << "[";
+  for (size_t i = 0; i < length; i++) {
+    cout << (*this)[i];
+    if (i < length - 1)
+      cout << ", ";
+  }
+  cout << "]" << endl;
+}
 
-  template <class T> void Array<T>::print(size_t index) const {
-    if (!data || !length) {
-      cout << "\nМассив пуст...\n";
-      return;
-    } else if (index >= length)
-      cout << "Элемент с индексом " << index << " не существует...";
-    cout << "arr[" << index << "] = " << (*this)[index] << endl;
-  }
+template <class T> void Array<T>::print(size_t index) const {
+  if (!data || !length) {
+    cout << "\nМассив пуст...\n";
+    return;
+  } else if (index >= length)
+    cout << "Элемент с индексом " << index << " не существует...";
+  cout << "arr[" << index << "] = " << (*this)[index] << endl;
+}
