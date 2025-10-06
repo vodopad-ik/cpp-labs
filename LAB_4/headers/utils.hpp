@@ -1,14 +1,22 @@
 #pragma once
 #include <string>
-using std ::string;
 
-void clearScreen();
-int inputInteger(const string &message = "");
-double inputDouble(const string &message = "");
-int positiveInputInteger(
-    const string &message = "", int max_value = 0,
-    const string &errorMessage = "Внимание! Введите положительное число: ");
-double positiveInputDouble(
-    const string &message = "", double max_value = 0.0,
-    const string &errorMessage = "Внимание! Введите положительное число: ");
-string inputOnlyLetters(const string &message = "");
+class Utils {
+public:
+  static void clearScreen();
+  static int inputInteger(const std::string &message = "");
+  static double inputDouble(const std::string &message = "");
+  static int
+  positiveInputInteger(const std::string &message = "", int max_value = 0,
+                       const std::string &errorMessage =
+                           "Внимание! Введите положительное число: ");
+  static double
+  positiveInputDouble(const std::string &message = "", double max_value = 0.0,
+                      const std::string &errorMessage =
+                          "Внимание! Введите положительное число: ");
+  static std::string inputOnlyLetters(const std::string &message = "");
+
+private:
+  Utils() = delete;
+  ~Utils() = delete;
+};

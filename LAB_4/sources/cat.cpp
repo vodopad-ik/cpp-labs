@@ -9,7 +9,7 @@ Cat::Cat(const string &name, int age, double weight, const string &color)
 string Cat::getColor() const { return color; }
 void Cat::voice() const { cout << "Мяу-мяу!\n"; }
 void Cat::describe() const {
-  clearScreen();
+  Utils::clearScreen();
   cout << SOLID_LINE;
   cout << " INFO: " << getName() << '\n';
   cout <<BROKEN_LINE;

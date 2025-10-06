@@ -4,9 +4,9 @@
 using std::cout;
 
 Human Program::useObjectHuman() const {
-  const string name = inputOnlyLetters("Введите имя человека: ");
-  int age = positiveInputInteger("Введите возраст: ", 150, "Внимание! Введите корректное значение, т.к. люди столько не живут. ");
-  const string status = inputOnlyLetters(
+  const string name = Utils::inputOnlyLetters("Введите имя человека: ");
+  int age = Utils::positiveInputInteger("Введите возраст: ", 150, "Внимание! Введите корректное значение, т.к. люди столько не живут. ");
+  const string status = Utils::inputOnlyLetters(
       "Введите социальный статус человека (например, школьник, сотрудник, "
       "пенсионер и т.п.): ");
   Human person(name, age, status);
@@ -15,21 +15,21 @@ Human Program::useObjectHuman() const {
 }
 
 Dog Program::useObjectDog() const {
-  const string name = inputOnlyLetters("Введите имя собачки/песика: ");
-  int age = positiveInputInteger("Введите возраст: ", 40, "Внимание! Введите корректоное значение, т. к. данный возраст не допустим для данного объекта. ");
-  double weight = positiveInputDouble("Введите вес(кг): ", 155.6, "Внимание! Введите корректное значение, т. к. данный вес не допустим для данного объекта. ");
+  const string name = Utils::inputOnlyLetters("Введите имя собачки/песика: ");
+  int age = Utils::positiveInputInteger("Введите возраст: ", 40, "Внимание! Введите корректоное значение, т. к. данный возраст не допустим для данного объекта. ");
+  double weight = Utils::positiveInputDouble("Введите вес(кг): ", 155.6, "Внимание! Введите корректное значение, т. к. данный вес не допустим для данного объекта. ");
   const string breed =
-      inputOnlyLetters("Введите его породу (например, бульдог, хаски, "
+      Utils::inputOnlyLetters("Введите его породу (например, бульдог, хаски, "
                        "ретривер и т.п.): ");
   Dog dog(name, age, weight, breed);
   dog.describe();
   return dog;
 }
 Cat Program::useObjectCat() const {
-  const string name = inputOnlyLetters("Введите имя котика/кошки: ");
-  int age = positiveInputInteger("Введите возраст: ", 40, "Внимание! Введите корректное значение, т. к. данный возраст не допустим для данного объекта. ");
-  double weight = positiveInputDouble("Введите вес(кг): ", 22.5, "Внимание! Введите корректное значение, т. к. данный вес не допустим для данного объекта. ");
-  const string color = inputOnlyLetters("Введите оттенок шерсти: ");
+  const string name = Utils::inputOnlyLetters("Введите имя котика/кошки: ");
+  int age = Utils::positiveInputInteger("Введите возраст: ", 40, "Внимание! Введите корректное значение, т. к. данный возраст не допустим для данного объекта. ");
+  double weight = Utils::positiveInputDouble("Введите вес(кг): ", 22.5, "Внимание! Введите корректное значение, т. к. данный вес не допустим для данного объекта. ");
+  const string color = Utils::inputOnlyLetters("Введите оттенок шерсти: ");
   Cat cat(name, age, weight, color);
   cat.describe();
   return cat;
@@ -74,7 +74,7 @@ bool Program::handleCatCase() const {
 
 int Program::getValidChoice(int min, int max) const {
   int choice;
-  while ((choice = inputInteger()) < min || choice > max) {
+  while ((choice = Utils::inputInteger()) < min || choice > max) {
     cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
   }
   return choice;

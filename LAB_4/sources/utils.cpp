@@ -3,9 +3,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <limits>
-using namespace std;
 
-void clearScreen() {
+void Utils::clearScreen() {
 #ifdef _WIN32
   std::system("cls");
 #else
@@ -13,17 +12,18 @@ void clearScreen() {
 #endif
 }
 
-int inputInteger(const string &message) {
+int Utils::inputInteger(const std::string &message) {
   if (!message.empty()) {
-    cout << message;
+    std::cout << message;
   }
   int number;
   while (true) {
-    cin >> number;
-    if (cin.fail() || cin.peek() != '\n') {
-      cout << "Некорректный ввод. Пожалуйста, введите только целое число.\n";
-      cin.clear();
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    std::cin >> number;
+    if (std::cin.fail() || std::cin.peek() != '\n') {
+      std::cout
+          << "Некорректный ввод. Пожалуйста, введите только целое число.\n";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     } else {
       break;
     }
@@ -31,72 +31,72 @@ int inputInteger(const string &message) {
   return number;
 }
 
-double inputDouble(const string &message) {
+double Utils::inputDouble(const std::string &message) {
   if (!message.empty()) {
-    cout << message;
+    std::cout << message;
   }
 
   double number;
   while (true) {
-    cin >> number;
-    if (cin.fail() || cin.peek() != '\n') {
-      cout << "Некорректный ввод. Пожалуйста, введите число: ";
-      cin.clear();
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    std::cin >> number;
+    if (std::cin.fail() || std::cin.peek() != '\n') {
+      std::cout << "Некорректный ввод. Пожалуйста, введите число: ";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     } else {
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       break;
     }
   }
   return number;
 }
 
-int positiveInputInteger(const string &message, int max_value,
-                         const string &errorMessage) {
+int Utils::positiveInputInteger(const std::string &message, int max_value,
+                                const std::string &errorMessage) {
   int value;
   do {
     if (!message.empty()) {
-      cout << message;
+      std::cout << message;
     }
     value = inputInteger();
 
     if (value <= 0) {
-      cout << "Внимание! Введите положительное число: ";
+      std::cout << "Внимание! Введите положительное число: ";
     } else if (max_value > 0 && value > max_value) {
-      cout << errorMessage;
+      std::cout << errorMessage;
     }
   } while (value <= 0 || (max_value > 0 && value > max_value));
   return value;
 }
 
-double positiveInputDouble(const string &message, double max_value,
-                           const string &errorMessage) {
+double Utils::positiveInputDouble(const std::string &message, double max_value,
+                                  const std::string &errorMessage) {
   double value;
   do {
     if (!message.empty()) {
-      cout << message;
+      std::cout << message;
     }
     value = inputDouble();
 
     if (value <= 0) {
-      cout << "Внимание! Введите положительное число: ";
+      std::cout << "Внимание! Введите положительное число: ";
     } else if (max_value > 0 && value > max_value) {
-      cout << errorMessage;
+      std::cout << errorMessage;
     }
   } while (value <= 0 || (max_value > 0 && value > max_value));
   return value;
 }
 
-string inputOnlyLetters(const string &message) {
-  string str;
+std::string Utils::inputOnlyLetters(const std::string &message) {
+  std::string str;
   while (true) {
     if (!message.empty()) {
-      cout << message;
+      std::cout << message;
     }
-    if (cin.peek() == '\n') {
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    if (std::cin.peek() == '\n') {
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
-    getline(cin, str);
+    std::getline(std::cin, str);
 
     bool allLetters = true;
     bool hasMeaningfulChars = false;
@@ -105,7 +105,7 @@ string inputOnlyLetters(const string &message) {
       if (c == ' ' || c == '-')
         continue;
 
-      if (isdigit(c) || ispunct(c)) {
+      if (std::isdigit(c) || std::ispunct(c)) {
         allLetters = false;
         break;
       }
@@ -115,7 +115,7 @@ string inputOnlyLetters(const string &message) {
     if (allLetters && hasMeaningfulChars) {
       return str;
     } else {
-      cout << "Некорректный ввод. Введите только буквы (и пробелы): ";
+      std::cout << "Некорректный ввод. Введите только буквы (и пробелы): ";
     }
   }
 }
