@@ -5,23 +5,23 @@
 
 int Program::getValidChoice(int min, int max) const {
   int choice;
-  while ((choice = inputInteger()) < min || choice > max) {
+  while ((choice = Utils::inputInteger()) < min || choice > max) {
     cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
   }
   return choice;
 }
 
-template <class T> Array<T> Program::createArr(int &choice) {
+template <typename T> Array<T> Program::createArr(int &choice) {
   printMenu_1();
   choice = getValidChoice(0, 2);
   if (choice == 2) {
-    size_t length = inputSize("Введите размер массива: ");
+    size_t length = Utils::inputSize("Введите размер массива: ");
     return Array<T>(length);
   }
   return Array<T>();
 }
 
-template <class T>
+template <typename T>
 bool Program::useTypeArr(function<T(const string &)> inputFunc) {
   int choice;
   Array<T> arr = createArr<T>(choice);
@@ -35,19 +35,19 @@ bool Program::useTypeArr(function<T(const string &)> inputFunc) {
       return false;
     case 1: {
       T value = inputFunc("Введите значение: ");
-      size_t index = inputSize("Введите индекс элемента в массиве: ", true);
+      size_t index = Utils::inputSize("Введите индекс элемента в массиве: ", true);
       arr.fill(value, index);
       break;
     }
     case 2: {
-      size_t index = inputSize("Введите индекс элемента в массиве: ", true);
+      size_t index = Utils::inputSize("Введите индекс элемента в массиве: ", true);
       arr.print(index);
       break;
     }
     case 3: {
       size_t length = arr.getLength();
       if (!length) {
-        length = inputSize("Внимание! Массив не инициализирован. Введите "
+        length = Utils::inputSize("Внимание! Массив не инициализирован. Введите "
                            "размер массива, чтобы продолжить: ");
         arr.setLength(length);
       }
@@ -72,12 +72,12 @@ bool Program::run(int choice) {
   case 0:
     return false;
   case 1:
-    return useTypeArr<int>(inputInteger);
+    return useTypeArr<int>(Utils::inputInteger);
   case 2:
-    return useTypeArr<double>(inputDouble);
+    return useTypeArr<double>(Utils::inputDouble);
   case 3:
     return useTypeArr<string>(
-        [](const string &msg) { return inputString(msg); });
+        [](const string &msg) { return Utils::inputString(msg); });
   default:
     cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
   }

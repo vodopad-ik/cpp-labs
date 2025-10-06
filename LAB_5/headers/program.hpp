@@ -4,7 +4,7 @@
 #include <functional>
 #include <string>
 using std::function;
-using std ::string;
+using std::string;
 
 class Program {
 private:

@@ -11,7 +11,7 @@ int main() {
   Program program;
   cout << "Выберите объект для создания: \n";
   printMenu();
-  while ((choice = inputInteger()) != 0 && program.run(choice)) {
+  while ((choice = Utils::inputInteger()) != 0 && program.run(choice)) {
     cout << "Выберите объект для создания: \n";
     printMenu();
   }

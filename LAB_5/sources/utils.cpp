@@ -3,63 +3,46 @@
 #include <cstdlib>
 #include <iostream>
 #include <limits>
-using namespace std;
 
-void clearInputBuffer() {
-  cin.clear();
-  cin.ignore(numeric_limits<streamsize>::max(), '\n');
+void Utils::clearInputBuffer() {
+  std::cin.clear();
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void clearScreen() {
+void Utils::clearScreen() {
 #ifdef _WIN32
-  system("cls");
+  std::system("cls");
 #else
-  system("clear");
+  std::system("clear");
 #endif
 }
 
-template <class T>
-T inputNumber(const string &message, const string &errorMsg) {
-  if (!message.empty())
-    cout << message;
-
-  T number;
-  while (true) {
-    cin >> number;
-    if (cin.fail() || cin.peek() != '\n') {
-      cout << errorMsg;
-      clearInputBuffer();
-    } else {
-      clearInputBuffer();
-      return number;
-    }
-  }
-}
-
-int inputInteger(const string &message) {
+int Utils::inputInteger(const std::string &message) {
   return inputNumber<int>(
       message, "Некорректный ввод. Пожалуйста, введите только целое число: ");
 }
 
-double inputDouble(const string &message) {
+double Utils::inputDouble(const std::string &message) {
   return inputNumber<double>(message,
                              "Некорректный ввод. Пожалуйста, введите число: ");
 }
 
-size_t inputSize(const string &message, bool allowZero) {
+size_t Utils::inputSize(const std::string &message, bool allowZero) {
   if (!message.empty())
-    cout << message;
+    std::cout << message;
 
   long long number;
   while (true) {
-    cin >> number;
-    if (cin.fail() || cin.peek() != '\n') {
-      cout << "Некорректный ввод. Пожалуйста, введите только целое число: ";
+    std::cin >> number;
+    if (std::cin.fail() || std::cin.peek() != '\n') {
+      std::cout
+          << "Некорректный ввод. Пожалуйста, введите только целое число: ";
       clearInputBuffer();
     } else if (number < 0) {
-      cout << "Размер не может быть отрицательным. Попробуйте снова: ";
+      std::cout << "Размер не может быть отрицательным. Попробуйте снова: ";
     } else if (!allowZero && number == 0) {
-      cout << "Размер должен быть положительным числом. Попробуйте снова: ";
+      std::cout
+          << "Размер должен быть положительным числом. Попробуйте снова: ";
     } else {
       clearInputBuffer();
       return static_cast<size_t>(number);
@@ -67,51 +50,34 @@ size_t inputSize(const string &message, bool allowZero) {
   }
 }
 
-template <class T, class InputFunc>
-T positiveInput(
-    const string &message, T max_value = 0, const string &errorMessage = "",
-    InputFunc inputFunc = [](const string &msg) {
-      cout << msg;
-      T value;
-      cin >> value;
-      return value;
-    }) {
-
-  T value;
-  do {
-    value = inputFunc(message);
-    if (value <= 0)
-      cout << "Внимание! Введите положительное число: ";
-    else if (max_value > 0 && value > max_value)
-      cout << errorMessage;
-  } while (value <= 0 || (max_value > 0 && value > max_value));
-
-  return value;
+int Utils::positiveInputInteger(const std::string &message, int max_value,
+                                const std::string &errorMessage) {
+  return positiveInput<int>(
+      message, max_value, errorMessage,
+      [](const std::string &msg) { return inputInteger(msg); });
 }
 
-int positiveInputInteger(const string &message, int max_value,
-                         const string &errorMessage) {
-  return positiveInput<int>(message, max_value, errorMessage, inputInteger);
+double Utils::positiveInputDouble(const std::string &message, double max_value,
+                                  const std::string &errorMessage) {
+  return positiveInput<double>(
+      message, max_value, errorMessage,
+      [](const std::string &msg) { return inputDouble(msg); });
 }
 
-double positiveInputDouble(const string &message, double max_value,
-                           const string &errorMessage) {
-  return positiveInput<double>(message, max_value, errorMessage, inputDouble);
-}
-
-string inputString(const string &message) {
+std::string Utils::inputString(const std::string &message) {
   if (!message.empty())
-    cout << message;
+    std::cout << message;
 
-  string str;
+  std::string str;
   while (true) {
-    getline(cin, str);
-    if (cin.fail()) {
-      cout << "Ошибка ввода. Попробуйте снова: ";
+    std::getline(std::cin, str);
+    if (std::cin.fail()) {
+      std::cout << "Ошибка ввода. Попробуйте снова: ";
       clearInputBuffer();
-    } else if (str.empty())
-      cout << "Строка не может быть пустой. Попробуйте снова: ";
-    else
+    } else if (str.empty()) {
+      std::cout << "Строка не может быть пустой. Попробуйте снова: ";
+    } else {
       return str;
+    }
   }
 }

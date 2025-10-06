@@ -1,7 +1,7 @@
 #pragma once
 #include <cstddef>
 
-template <class T> class Array {
+template <typename T> class Array {
 private:
   T *data = nullptr;
   size_t length = 0;

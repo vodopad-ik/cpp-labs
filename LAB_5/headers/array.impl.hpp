@@ -5,40 +5,40 @@
 #include <iostream>
 using std::cout, std::endl;
 
-template <class T>
+template <typename T>
 Array<T>::Array(size_t length) : length(length), data(new T[length]()) {}
 
-template <class T> Array<T>::Array(const Array &other) : length(other.length) {
+template <typename T> Array<T>::Array(const Array &other) : length(other.length) {
   data = new T[length];
   for (size_t i = 0; i < length; i++)
     data[i] = other.data[i];
 }
 
-template <class T>
+template <typename T>
 Array<T>::Array(Array &&other) noexcept
     : data(other.data), length(other.length) {
   other.data = nullptr;
   other.length = 0;
 }
 
-template <class T> Array<T>::~Array() {
+template <typename T> Array<T>::~Array() {
   delete[] data;
   data = nullptr;
 }
 
-template <class T> T &Array<T>::operator[](size_t index) {
+template <typename T> T &Array<T>::operator[](size_t index) {
   if (index >= length)
     return data[length - 1];
   return data[index];
 }
 
-template <class T> const T &Array<T>::operator[](size_t index) const {
+template <typename T> const T &Array<T>::operator[](size_t index) const {
   if (index >= length)
     return data[length - 1];
   return data[index];
 }
 
-template <class T> Array<T> &Array<T>::operator=(const Array &other) {
+template <typename T> Array<T> &Array<T>::operator=(const Array &other) {
   if (this != &other) {
     delete[] data;
     length = other.length;
@@ -50,7 +50,7 @@ template <class T> Array<T> &Array<T>::operator=(const Array &other) {
   return *this;
 }
 
-template <class T> Array<T> &Array<T>::operator=(Array &&other) noexcept {
+template <typename T> Array<T> &Array<T>::operator=(Array &&other) noexcept {
   if (this != &other) {
     delete[] data;
     data = other.data;
@@ -61,8 +61,8 @@ template <class T> Array<T> &Array<T>::operator=(Array &&other) noexcept {
   return *this;
 }
 
-template <class T> size_t Array<T>::getLength() const { return length; }
-template <class T> void Array<T>::setLength(size_t new_length) {
+template <typename T> size_t Array<T>::getLength() const { return length; }
+template <typename T> void Array<T>::setLength(size_t new_length) {
   if (new_length == length)
     return;
   auto new_data = new T[new_length]();
@@ -75,10 +75,10 @@ template <class T> void Array<T>::setLength(size_t new_length) {
   length = new_length;
 }
 
-template <class T> void Array<T>::fill(const T &value, size_t index) {
+template <typename T> void Array<T>::fill(const T &value, size_t index) {
   if (!data || !length) {
     size_t new_length =
-        inputSize("Внимание! Массив не инициализирован. Введите "
+        Utils::inputSize("Внимание! Массив не инициализирован. Введите "
                   "размер массива, чтобы продолжить: ");
     setLength(new_length);
   }
@@ -88,7 +88,7 @@ template <class T> void Array<T>::fill(const T &value, size_t index) {
     (*this)[index] = value;
 }
 
-template <class T> void Array<T>::print() const {
+template <typename T> void Array<T>::print() const {
   if (!data) {
     cout << "\nМассив пуст...\n";
     return;
@@ -102,7 +102,7 @@ template <class T> void Array<T>::print() const {
   cout << "]" << endl;
 }
 
-template <class T> void Array<T>::print(size_t index) const {
+template <typename T> void Array<T>::print(size_t index) const {
   if (!data || !length) {
     cout << "\nМассив пуст...\n";
     return;

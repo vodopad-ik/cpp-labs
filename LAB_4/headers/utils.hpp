@@ -16,7 +16,5 @@ public:
                           "Внимание! Введите положительное число: ");
   static std::string inputOnlyLetters(const std::string &message = "");
 
-private:
-  Utils() = delete;
-  ~Utils() = delete;
+ 
 };
