@@ -1,7 +1,6 @@
 #include <iostream>
 #include <limits>
 #include <string>
-#include <cctype>
 #include "utils.hpp"
 using namespace std;
 
@@ -25,28 +24,16 @@ double input(const string& message) {
     return number;
 }
 
-string inputAlphanumeric(const string& message) {
-    if (!message.empty()) {
+string inputEquationString(const string& message) {
+    if (!message.empty()) 
         cout << message;
-    }
-
-    string input;
-    getline(cin, input);
-
-    // Проверка на пустую строку
-    if (input.empty()) {
-        throw InvalidInputException("Введена пустая строка. Допустимы только цифры и латинские символы.");
-    }
-
-    // Проверка каждого символа
-    for (char c : input) {
-        if (!isalnum(static_cast<unsigned char>(c))) {
-            string error_msg = "Обнаружен недопустимый символ: '";
-            error_msg += c;
-            error_msg += "'. Допустимы только цифры и латинские символы (a-z, A-Z, 0-9).";
-            throw InvalidInputException(error_msg);
-        }
-    }
-
-    return input;
+    string str;
+    getline(cin, str);
+    
+    size_t start = str.find_first_not_of(" \t");
+    size_t end = str.find_last_not_of(" \t");
+    
+    if (start != string::npos && end != string::npos)
+        str = str.substr(start, end - start + 1); 
+    return str;
 }

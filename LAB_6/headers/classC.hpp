@@ -2,8 +2,6 @@
 #include "classA.hpp"
 #include "classB.hpp"
 #include <complex>
-#include <string>
-using std::string;
 
 class C : public B {
 private:
@@ -11,10 +9,11 @@ private:
   std::complex<double> x1;
   std::complex<double> x2;
   bool is_solve = false;
-  string additional_info;
 
 public:
-  explicit C(double a_val = 1.0, double b_val = 0.0, double c_val = 0.0);
+  explicit C(double a_val, double b_val, double c_val);
+  explicit C(const std::string &equation);
+  explicit C();
   void setC(double val);
   double getC() const;
   void printEquation() const;
@@ -22,4 +21,7 @@ public:
   double searchDiscrimen() const;
   void solve();
   void printSolve() const;
+
+  void parseEquationFromString(const std::string &equationStr);
+  static void validateEquationString(const std::string &equationStr);
 };

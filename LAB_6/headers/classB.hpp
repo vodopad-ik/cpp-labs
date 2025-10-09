@@ -1,5 +1,6 @@
 #pragma once
 #include "classA.hpp"
+#include "utils.hpp"
 
 class B : public A {
 private:
