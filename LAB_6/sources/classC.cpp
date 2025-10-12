@@ -3,11 +3,7 @@
 #include "classB.hpp"
 #include <algorithm>
 #include <cctype>
-#include <complex>
-#include <iostream>
-#include <limits>
 #include <regex>
-#include <sstream>
 #include <stdexcept>
 using namespace std;
 
