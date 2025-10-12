@@ -3,7 +3,7 @@
 #include <iostream>
 
 BinaryFile::BinaryFile(const std::string &file_name)
-    : file_name(file_name), current_position(0) {}
+    : file_name(file_name) {}
 BinaryFile &BinaryFile::operator<<(const std::string &str) {
   // Используем init-statement в if
     if (std::ofstream file(file_name, std::ios::binary | std::ios::app); file.is_open()) {

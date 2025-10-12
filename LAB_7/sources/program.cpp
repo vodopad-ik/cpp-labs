@@ -10,7 +10,7 @@ int Program::getValidChoice(int min, int max) const {
   return choice;
 }
 
-bool Program::run(int choice) {
+bool Program::run(int choice) const {
   CarManager manager("cars.dat");
   switch (choice) {
   case 0:

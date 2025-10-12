@@ -6,7 +6,7 @@
 class BinaryFile {
 private:
   std::string file_name;
-  std::streampos current_position;
+  std::streampos current_position = 0;
 
 public:
   explicit BinaryFile(const std::string &file_name);
@@ -26,33 +26,33 @@ public:
   }
 
   // Перегрузка оператора >> для чтения любых данных
- template <typename T>
-BinaryFile &operator>>(T &data) {
+  template <typename T> BinaryFile &operator>>(T &data) {
     // Используем init-statement в if
     if (std::ifstream file(file_name, std::ios::binary); file.is_open()) {
-        if (current_position != 0) {
-            file.seekg(current_position);
-        }
-        
-        if (file.peek() == EOF) {
-            current_position = std::streampos(-1);
-            return *this;
-        }
-        
-        // Безопасное приведение типов
-        file.read(static_cast<char*>(static_cast<void*>(&data)), sizeof(T));
-        
-        if (file.fail()) {
-            current_position = std::streampos(-1);
-        } else {
-            current_position = file.tellg();
-        }
-    } else {
-        std::cerr << "Ошибка открытия файла для чтения: " << file_name << std::endl;
+      if (current_position != 0) {
+        file.seekg(current_position);
+      }
+
+      if (file.peek() == EOF) {
         current_position = std::streampos(-1);
+        return *this;
+      }
+
+      // Безопасное приведение типов
+      file.read(static_cast<char *>(static_cast<void *>(&data)), sizeof(T));
+
+      if (file.fail()) {
+        current_position = std::streampos(-1);
+      } else {
+        current_position = file.tellg();
+      }
+    } else {
+      std::cerr << "Ошибка открытия файла для чтения: " << file_name
+                << std::endl;
+      current_position = std::streampos(-1);
     }
     return *this;
-}
+  }
 
   // Специализация для строк
   BinaryFile &operator<<(const std::string &str);

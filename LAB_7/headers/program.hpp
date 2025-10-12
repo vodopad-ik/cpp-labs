@@ -7,5 +7,5 @@ private:
   int getValidChoice(int min, int max) const;
 
 public:
-  bool run(int choice);
+  bool run(int choice) const;
 };

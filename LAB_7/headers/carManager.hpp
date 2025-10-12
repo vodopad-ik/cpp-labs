@@ -7,7 +7,7 @@ private:
   BinaryFile file;
 
 public:
-  CarManager(const std::string &filename);
+  explicit CarManager(const std::string &filename);
   // Добавление машины в файл (используем перегруженный оператор)
   bool addCar(const Car &car);
   // Чтение следующей машины из файла (используем перегруженный оператор)
