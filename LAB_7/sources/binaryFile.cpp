@@ -5,33 +5,52 @@
 BinaryFile::BinaryFile(const std::string &file_name)
     : file_name(file_name), current_position(0) {}
 BinaryFile &BinaryFile::operator<<(const std::string &str) {
-  std::ofstream file(file_name, std::ios::binary | std::ios::app);
-  if (file.is_open()) {
-    size_t size = str.size();
-    file.write(reinterpret_cast<const char *>(&size), sizeof(size));
-    file.write(str.c_str(), size);
-  } else {
-    std::cerr << "Ошибка открытия файла для записи: " << file_name << std::endl;
-  }
+  // Используем init-statement в if
+    if (std::ofstream file(file_name, std::ios::binary | std::ios::app); file.is_open()) {
+        size_t size = str.size();
+        // Безопасное приведение типов
+        file.write(static_cast<const char*>(static_cast<const void*>(&size)), sizeof(size));
+        file.write(str.c_str(), size);
+    } else {
+        std::cerr << "Ошибка открытия файла для записи: " << file_name << std::endl;
+    }
   return *this;
 }
 
 BinaryFile &BinaryFile::operator>>(std::string &str) {
-  std::ifstream file(file_name, std::ios::binary);
-  if (file.is_open()) {
-    if (current_position != 0)
-      file.seekg(current_position);
-
-    size_t size;
-    file.read(reinterpret_cast<char *>(&size), sizeof(size));
-    if (file.good()) {
-      str.resize(size);
-      file.read(&str[0], size);
-      current_position = file.tellg();
+   // Используем init-statement в if
+    if (std::ifstream file(file_name, std::ios::binary); file.is_open()) {
+        if (current_position != 0) {
+            file.seekg(current_position);
+        }
+        
+        if (file.peek() == EOF) {
+            current_position = std::streampos(-1);
+            return *this;
+        }
+        
+        size_t size;
+        // Безопасное приведение типов
+        file.read(static_cast<char*>(static_cast<void*>(&size)), sizeof(size));
+        
+        if (file.fail()) {
+            current_position = std::streampos(-1);
+            return *this;
+        }
+        
+        str.resize(size);
+        file.read(&str[0], size);
+        
+        if (file.fail()) {
+            current_position = std::streampos(-1);
+        } else {
+            current_position = file.tellg();
+        }
+    } else {
+        std::cerr << "Ошибка открытия файла для чтения: " << file_name << std::endl;
+        current_position = std::streampos(-1);
     }
-  } else
-    std::cerr << "Ошибка открытия файла для чтения: " << file_name << std::endl;
-  return *this;
+    return *this;
 }
 
 void BinaryFile::resetPosition() { current_position = 0; }

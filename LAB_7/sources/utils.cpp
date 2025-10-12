@@ -9,7 +9,7 @@ void Utils::clearInputBuffer() {
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void Utils:: clearScreen() {
+void Utils:: clearScreen() { 
 #ifdef _WIN32
   std::system("cls");
 #else
