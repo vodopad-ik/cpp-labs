@@ -1,6 +1,6 @@
 #pragma once
 #include "binaryFile.hpp"
-#include <iostream> // Необходим для std::ostream и std::istream
+#include <iostream> 
 #include <string>
 #include <string_view>
 
@@ -23,12 +23,6 @@ public:
 
   void display() const;
 
-  // =========================================================
-  // СКРЫТЫЕ ДРУЖЕСТВЕННЫЕ ФУНКЦИИ (Hidden Friends)
-  // Определены внутри класса. Ключевое слово 'friend' используется.
-  // =========================================================
-
-  // 1. BinaryFile <<
   friend BinaryFile &operator<<(BinaryFile &file, const Car &car) {
     file << car.license_plate;
     file << car.year;
@@ -36,32 +30,21 @@ public:
     return file;
   }
 
-  // 2. BinaryFile >>
-  friend BinaryFile &operator>>(BinaryFile &file, Car &car) {
-    std::string plate;
-    std::string color;
-    int year;
+  // car.hpp (Скрытая дружественная функция с прямым доступом)
 
-    file >> plate;
-    file >> year;
-    file >> color;
-
-    // Используем сеттеры, как было в оригинальной реализации
-    car.setLicensePlate(plate);
-    car.setYear(year);
-    car.setColor(color);
+friend BinaryFile &operator>>(BinaryFile &file, Car &car) {
+    file >> car.license_plate;
+    file >> car.year;
+    file >> car.color;
 
     return file;
-  }
-
-  // 3. std::ostream <<
+}
   friend std::ostream &operator<<(std::ostream &os, const Car &car) {
     os << "Номер: " << car.license_plate << ", Год: " << car.year
        << ", Цвет: " << car.color;
     return os;
   }
 
-  // 4. std::istream >>
   friend std::istream &operator>>(std::istream &is, Car &car) {
     std::cout << "Введите номер машины: ";
     is >> car.license_plate;
