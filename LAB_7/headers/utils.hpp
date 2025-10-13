@@ -42,13 +42,18 @@ private:
     return value;
   }
 
+  // Вспомогательные методы для рефакторинга inputOnlyLetters
+  static bool isValidCharacter(unsigned char c);
+  static bool processCyrillicCharacter(const std::string& str, size_t& i);
+  static bool validateStringCharacters(const std::string& str, bool& hasMeaningfulChars);
+
 public:
   static void clearScreen();
   static int inputInteger(const string &message = "");
   static double inputDouble(const string &message = "");
   static size_t inputSize(const string &message, bool allow_zero = false);
   static int positiveInputInteger(
-      const string &message = "", int min_value = 0, int max_value = 0,
+      const string &message = "", int max_value = 0,
       const string &errorMessage = "Внимание! Введите положительное число: ");
   static double positiveInputDouble(
       const string &message = "", double max_value = 0.0,

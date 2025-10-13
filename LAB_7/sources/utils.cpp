@@ -9,7 +9,7 @@ void Utils::clearInputBuffer() {
   std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
-void Utils:: clearScreen() { 
+void Utils::clearScreen() { 
 #ifdef _WIN32
   std::system("cls");
 #else
@@ -50,8 +50,7 @@ size_t Utils::inputSize(const std::string &message, bool allowZero) {
   }
 }
 
-int Utils::positiveInputInteger(const std::string &message, int min_value,
-                                int max_value,
+int Utils::positiveInputInteger(const std::string &message, int max_value,
                                 const std::string &errorMessage) {
   return positiveInput<int>(
       message, max_value, errorMessage,
@@ -87,63 +86,91 @@ bool Utils::isCyrillicChar(unsigned char c) {
     return (c >= 0xD0 && c <= 0xD1) || (c >= 0xD2 && c <= 0xD3);
 }
 
-std::string Utils::inputOnlyLetters(const std::string &message) {
-  std::string str;
-  while (true) {
-    if (!message.empty())
-      std::cout << message;
-    if (std::cin.peek() == '\n')
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+// =========================================================
+// ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ДЛЯ РЕФАКТОРИНГА
+// =========================================================
 
-    std::getline(std::cin, str);
+bool Utils::isValidCharacter(unsigned char c) {
+    // Разрешаем пробелы и дефисы
+    if (c == ' ' || c == '-') {
+        return true;
+    }
+    
+    // Проверяем латинские буквы
+    bool isLatinLetter = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+    
+    // Проверяем кириллические символы (UTF-8)
+    bool isCyrillic = isCyrillicChar(c);
+    
+    // Проверяем цифры
+    bool isDigit = (c >= '0' && c <= '9');
+    
+    // Проверяем пунктуацию (кроме дефиса, который уже разрешен)
+    bool isPunctuation = std::ispunct(c) && c != '-';
 
-    bool allValidChars = true;
-    bool hasMeaningfulChars = false;
+    // Запрещаем цифры и пунктуацию
+    if (isDigit || isPunctuation) {
+        return false;
+    }
+    
+    // Разрешаем только латинские и кириллические буквы
+    return isLatinLetter || isCyrillic;
+}
 
-    for (size_t i = 0; i < str.length(); i++) {
-      unsigned char c = str[i];
-      
-      // Разрешаем пробелы и дефисы
-      if (c == ' ' || c == '-')
-        continue;
-
-      // Проверяем латинские буквы
-      bool isLatinLetter = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
-      
-      // Проверяем кириллические символы (UTF-8)
-      bool isCyrillic = isCyrillicChar(c);
-      
-      // Проверяем цифры
-      bool isDigit = (c >= '0' && c <= '9');
-      
-      // Проверяем пунктуацию (кроме дефиса, который уже разрешен)
-      bool isPunctuation = std::ispunct(c) && c != '-';
-
-      if (isDigit || isPunctuation) {
-        allValidChars = false;
-        break;
-      }
-      
-      // Если символ не латинская буква и не кириллический - невалидный
-      if (!isLatinLetter && !isCyrillic) {
-        allValidChars = false;
-        break;
-      }
-      
-      hasMeaningfulChars = true;
-      
-      // Пропускаем второй байт UTF-8 символов кириллицы
-      if (isCyrillic && i + 1 < str.length()) {
+bool Utils::processCyrillicCharacter(const std::string& str, size_t& i) {
+    if (i + 1 < str.length()) {
         i++; // Пропускаем следующий байт UTF-8 символа
-      }
+        return true;
     }
+    return false;
+}
 
-    if (allValidChars && hasMeaningfulChars) {
-      return str;
-    } else {
-      std::cout << "Некорректный ввод. Введите только буквы (русские, английские и пробелы): ";
+bool Utils::validateStringCharacters(const std::string& str, bool& hasMeaningfulChars) {
+    for (size_t i = 0; i < str.length(); i++) {
+        unsigned char c = str[i];
+        
+        if (!isValidCharacter(c)) {
+            return false;
+        }
+        
+        // Считаем только значимые символы (не пробелы и не дефисы)
+        if (c != ' ' && c != '-') {
+            hasMeaningfulChars = true;
+            
+            // Обрабатываем кириллические символы
+            if (isCyrillicChar(c)) {
+                if (!processCyrillicCharacter(str, i)) {
+                    return false; // Некорректный UTF-8 символ
+                }
+            }
+        }
     }
-  }
+    return true;
+}
+
+std::string Utils::inputOnlyLetters(const std::string &message) {
+    std::string str;
+    
+    while (true) {
+        if (!message.empty()) {
+            std::cout << message;
+        }
+        
+        if (std::cin.peek() == '\n') {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        }
+
+        std::getline(std::cin, str);
+        
+        bool hasMeaningfulChars = false;
+        bool allValidChars = validateStringCharacters(str, hasMeaningfulChars);
+        
+        if (allValidChars && hasMeaningfulChars) {
+            return str;
+        } else {
+            std::cout << "Некорректный ввод. Введите только буквы (русские, английские и пробелы): ";
+        }
+    }
 }
 
 int Utils::inputIntegerInRange(const std::string &message, int min_value,
