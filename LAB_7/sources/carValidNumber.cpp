@@ -89,9 +89,8 @@ std::string CarNumber::inputLicensePlate(const std::string &message) {
   }
 
   std::string result;
-  for (int i = 0; i < plate.length(); i++) {
-    result += plate[i];
-  }
+  for (char c : plate)
+    result += c;
 
   std::cout << "Принят номер: " << result << std::endl;
   return plate;

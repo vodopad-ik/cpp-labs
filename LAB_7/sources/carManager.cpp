@@ -12,12 +12,9 @@ bool CarManager::addCar(const Car &car) {
 
 bool CarManager::readNextCar(Car &car) {
     // Проверяем, не достигли ли конца файла
-    if (file.isEndOfFile()) {
+    if (file.isEndOfFile()) 
         return false;
-    }
-    
     file >> car;
-    
     // Проверяем, удалось ли прочитать корректные данные
     return !file.isEndOfFile() && car.isFilled();
 }
