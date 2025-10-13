@@ -1,7 +1,7 @@
 #pragma once
 #include "binaryFile.hpp"
-#include <iostream>
 #include <string>
+#include <string_view> // добавляем
 
 class Car {
 private:
@@ -12,13 +12,13 @@ private:
 public:
   Car();
   Car(const std::string &plate, int y, const std::string &c);
-  bool isFilled()const ;
+  bool isFilled() const;
   std::string getLicensePlate() const;
   int getYear() const;
   std::string getColor() const;
-  void setLicensePlate(const std::string &plate);
+  void setLicensePlate(std::string_view plate);
+  void setColor(std::string_view c);
   void setYear(int y);
-  void setColor(const std::string &c);
 
   void display() const;
 

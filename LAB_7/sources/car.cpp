@@ -1,19 +1,28 @@
 #include "car.hpp"
+#include <iostream>
 
 Car::Car() : license_plate(""), year(0), color("") {}
 
 Car::Car(const std::string &plate, int y, const std::string &c)
     : license_plate(plate), year(y), color(c) {}
+
 bool Car::isFilled() const {
-  return (!license_plate.empty() && !color.empty() && year) ? true : false;
+  return (!license_plate.empty() && !color.empty() && year);
 }
+
 std::string Car::getLicensePlate() const { return license_plate; }
 int Car::getYear() const { return year; }
 std::string Car::getColor() const { return color; }
 
-void Car::setLicensePlate(const std::string &plate) { license_plate = plate; }
+void Car::setLicensePlate(std::string_view plate) { 
+    license_plate = plate; 
+}
+
+void Car::setColor(std::string_view c) { 
+    color = c; 
+}
+
 void Car::setYear(int y) { year = y; }
-void Car::setColor(const std::string &c) { color = c; }
 
 void Car::display() const {
   std::cout << "Номер: " << license_plate << ", Год: " << year
@@ -22,26 +31,27 @@ void Car::display() const {
 
 // Перегрузка для BinaryFile - запись
 BinaryFile &operator<<(BinaryFile &file, const Car &car) {
-  file << car.license_plate; // Используем перегруженный оператор для string
-  file << car.year; // Используем перегруженный оператор для int
-  file << car.color; // Используем перегруженный оператор для string
+  file << car.license_plate;
+  file << car.year;
+  file << car.color;
   return file;
 }
 
 // Перегрузка для BinaryFile - чтение
 BinaryFile &operator>>(BinaryFile &file, Car &car) {
-  std::string plate, color;
-  int year;
+    std::string plate;
+    std::string color;
+    int year;
 
-  file >> plate; // Читаем номер
-  file >> year;  // Читаем год
-  file >> color; // Читаем цвет
+    file >> plate;
+    file >> year;
+    file >> color;
 
-  car.setLicensePlate(plate);
-  car.setYear(year);
-  car.setColor(color);
+    car.setLicensePlate(plate);
+    car.setYear(year);
+    car.setColor(color);
 
-  return file;
+    return file;
 }
 
 // Перегрузка для стандартных потоков
