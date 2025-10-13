@@ -10,8 +10,14 @@ private:
   std::complex<double> x2;
   bool is_solve = false;
 
-  void parseEquationFromString(const std::string &equationStr);
-  static void validateEquationString(const std::string &equationStr);
+  void validateEquationString(const std::string &str);
+  void parseEquationString(const std::string &eq);
+
+  void parseA(std::string &simplified, double &a);
+  void parseB(std::string &simplified, double &b);
+  void parseC(const std::string &simplified, double &c_val);
+  double parseNumber(const std::string &num_str, double default_value = 1.0);
+  bool isAFound(const std::string &simplified);
 
 public:
   explicit C(double a_val, double b_val, double c_val);

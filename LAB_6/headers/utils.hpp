@@ -1,6 +1,14 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
-double input(const std::string& message="");
-std::string inputEquationString(const std::string& message="");
+class Utils {
+public:
+    static double input(const std::string& message = "");
+    static std::string inputString(const std::string& message = "");
+    static double stringToDouble(const std::string& str);
+    
+private:
+    Utils() = delete;
+};
