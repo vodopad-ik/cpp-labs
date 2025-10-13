@@ -1,16 +1,17 @@
 #pragma once
 #include "binaryFile.hpp"
+#include <iostream> // Необходим для std::ostream и std::istream
 #include <string>
-#include <string_view> // добавляем
+#include <string_view>
 
 class Car {
 private:
-  std::string license_plate;
-  int year;
-  std::string color;
+  std::string license_plate = "";
+  int year = 0;
+  std::string color = "";
 
 public:
-  Car();
+  Car() = default;
   Car(const std::string &plate, int y, const std::string &c);
   bool isFilled() const;
   std::string getLicensePlate() const;
@@ -22,11 +23,52 @@ public:
 
   void display() const;
 
-  // Перегрузка операторов для работы с BinaryFile
-  friend BinaryFile &operator<<(BinaryFile &file, const Car &car);
-  friend BinaryFile &operator>>(BinaryFile &file, Car &car);
+  // =========================================================
+  // СКРЫТЫЕ ДРУЖЕСТВЕННЫЕ ФУНКЦИИ (Hidden Friends)
+  // Определены внутри класса. Ключевое слово 'friend' используется.
+  // =========================================================
 
-  // Перегрузка для стандартных потоков
-  friend std::ostream &operator<<(std::ostream &os, const Car &car);
-  friend std::istream &operator>>(std::istream &is, Car &car);
+  // 1. BinaryFile <<
+  friend BinaryFile &operator<<(BinaryFile &file, const Car &car) {
+    file << car.license_plate;
+    file << car.year;
+    file << car.color;
+    return file;
+  }
+
+  // 2. BinaryFile >>
+  friend BinaryFile &operator>>(BinaryFile &file, Car &car) {
+    std::string plate;
+    std::string color;
+    int year;
+
+    file >> plate;
+    file >> year;
+    file >> color;
+
+    // Используем сеттеры, как было в оригинальной реализации
+    car.setLicensePlate(plate);
+    car.setYear(year);
+    car.setColor(color);
+
+    return file;
+  }
+
+  // 3. std::ostream <<
+  friend std::ostream &operator<<(std::ostream &os, const Car &car) {
+    os << "Номер: " << car.license_plate << ", Год: " << car.year
+       << ", Цвет: " << car.color;
+    return os;
+  }
+
+  // 4. std::istream >>
+  friend std::istream &operator>>(std::istream &is, Car &car) {
+    std::cout << "Введите номер машины: ";
+    is >> car.license_plate;
+    std::cout << "Введите год выпуска: ";
+    is >> car.year;
+    std::cout << "Введите цвет: ";
+    is >> car.color;
+    return is;
+  }
 };
