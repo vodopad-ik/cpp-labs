@@ -58,11 +58,8 @@ bool Utils::isValidCharacter(unsigned char c) {
   // Проверяем цифры
   bool isDigit = (c >= '0' && c <= '9');
 
-  // Проверяем пунктуацию (кроме дефиса, который уже разрешен)
-  bool isPunctuation = std::ispunct(c) && c != '-';
-
-  // Запрещаем цифры и пунктуацию
-  if (isDigit || isPunctuation) {
+  // Используем init-statement для проверки пунктуации
+  if (bool isPunctuation = std::ispunct(c) && c != '-'; isDigit || isPunctuation) {
     return false;
   }
 
@@ -70,7 +67,7 @@ bool Utils::isValidCharacter(unsigned char c) {
   return isLatinLetter || isCyrillic;
 }
 
-bool Utils::processCyrillicCharacter(const std::string &str, size_t &i) {
+bool Utils::processCyrillicCharacter(std::string_view str, size_t &i) {
   if (i + 1 < str.length()) {
     i++; // Пропускаем следующий байт UTF-8 символа
     return true;
@@ -78,9 +75,10 @@ bool Utils::processCyrillicCharacter(const std::string &str, size_t &i) {
   return false;
 }
 
-bool Utils::validateStringCharacters(const std::string &str,
-                                     bool &hasMeaningfulChars) {
-  for (size_t i = 0; i < str.length(); i++) {
+bool Utils::validateStringCharacters(std::string_view str, bool &hasMeaningfulChars) {
+  // Используем while для более безопасной обработки индекса
+  size_t i = 0;
+  while (i < str.length()) {
     unsigned char c = str[i];
 
     if (!isValidCharacter(c)) {
@@ -91,13 +89,13 @@ bool Utils::validateStringCharacters(const std::string &str,
     if (c != ' ' && c != '-') {
       hasMeaningfulChars = true;
 
-      // Обрабатываем кириллические символы
-      if (isCyrillicChar(c)) {
-        if (!processCyrillicCharacter(str, i)) {
-          return false; // Некорректный UTF-8 символ
-        }
+      // Обрабатываем кириллические символы - объединяем условия
+      if (isCyrillicChar(c) && !processCyrillicCharacter(str, i)) {
+        return false; // Некорректный UTF-8 символ
       }
     }
+    
+    i++; // Переходим к следующему символу
   }
   return true;
 }

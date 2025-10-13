@@ -17,24 +17,24 @@ bool Program::run(int choice) const {
   case 0:
     return false;
   case 1: {
-    string plate = CarNumber::inputLicensePlate("Введите номер машины: ");
-    cout << "Введите год выпуска: ";
+    std::string plate = CarNumber::inputLicensePlate("Введите номер машины: ");
+    std::cout << "Введите год выпуска: ";
     int year = Utils::inputIntegerInRange(
         "", 1900, 2025,
         "Внимание! Год должен быть в интервале от 1900 до 2025 года.");
-    string color = Utils::inputOnlyLetters("Введите оттенок кузова: ");
+    std::string color = Utils::inputOnlyLetters("Введите оттенок кузова: ");
 
     // Используем init-statement в if
     if (Car newCar(plate, year, color); manager.addCar(newCar)) {
-      cout << "Машина успешно добавлена!" << std::endl;
+      std::cout << "Машина успешно добавлена!" << std::endl;
       newCar.display();
     } else {
-      cout << "Ошибка: не удалось добавить машину!" << std::endl;
+      std::cout << "Ошибка: не удалось добавить машину!" << std::endl;
     }
     break;
   }
   case 2: {
-    cout << "\nВсе машины в файле:" << std::endl;
+    std::cout << "\nВсе машины в файле:" << std::endl;
     manager.reset();
     Car car;
     int count = 0;
@@ -42,12 +42,12 @@ bool Program::run(int choice) const {
     while (manager.readNextCar(car)) {
       // Извлекаем инкремент из выражения
       count++;
-      cout << count << ". ";
+      std::cout << count << ". ";
       car.display();
     }
 
     if (count == 0) {
-      cout << "Файл пуст или не существует!" << std::endl;
+      std::cout << "Файл пуст или не существует!" << std::endl;
     }
     break;
   }
@@ -56,12 +56,12 @@ bool Program::run(int choice) const {
         Utils::inputIntegerInRange("Введите год выпуска для поиска: ", 1900,
                                    2025, "Год должен быть от 1900 до 2025.");
     int count = manager.countCarsByYear(year);
-    cout << "Количество машин " << year << " года выпуска: " << count
+    std::cout << "Количество машин " << year << " года выпуска: " << count
          << std::endl;
     break;
   }
   default:
-    cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
+    std::cout << "Выберите один из вариантов, представленных в меню!!!\n> ";
   }
   return true;
 }
