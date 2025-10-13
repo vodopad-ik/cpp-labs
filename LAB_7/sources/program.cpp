@@ -3,12 +3,8 @@
 #include "utils.hpp"
 
 int Program::getValidChoice(int min, int max) const {
-  int choice;
-  while (choice = Utils::inputIntInRange(
-             "", min, max,
-             "Выберите один из вариантов, представленных в меню!!!\n> "))
-    ;
-  return choice;
+  return Utils::inputIntInRange(
+      "", min, max, "Выберите один из вариантов, представленных в меню!!!\n> ");
 }
 
 bool Program::run(int choice) const {
