@@ -5,7 +5,6 @@
 
 class Utils {
 private:
-  static void clearInputBuffer();
 
   static bool isValidCharacter(unsigned char c);
   static bool processCyrillicCharacter(std::string_view str, size_t &i);
@@ -13,6 +12,7 @@ private:
                                        bool &hasMeaningfulChars);
 
 public:
+  static void clearInputBuffer();
   static void clearScreen();
   static bool isCyrillicChar(unsigned char c);
   static std::string inputOnlyLetters(const std::string &message = "");

@@ -8,9 +8,7 @@
 using namespace std;
 
 C::C(double a_val, double b_val, double c_val) : B(a_val, b_val), c(c_val) {}
-C::C(const std::string &equation) {
-  parseEquationFromString(equation);
-}
+C::C(const std::string &equation) { parseEquationFromString(equation); }
 C::C() {
   std::string equation_str =
       inputEquationString("Введите квадратное уравнение: ");
@@ -19,6 +17,8 @@ C::C() {
 
 void C::setC(double val) { c = val; }
 double C::getC() const { return c; }
+std::complex<double> C::getX1() const { return x1; }
+std::complex<double> C::getX2() const { return x2; }
 void C::printEquation() const {
   double a = getA();
   double b = getB();
@@ -96,24 +96,23 @@ void C::printSolve() const {
 }
 
 void C::validateEquationString(const std::string &equationStr) {
-  regex allowed_pattern(R"(^[0-9a-zA-Z\s\.\+\-\*\/\^=x]+$)");
-
-  if (!regex_match(equationStr, allowed_pattern)) {
+   if (regex allowed_pattern(R"(^[0-9a-zA-Z\s\.\+\-\*\/\^=x]+$)"); !regex_match(equationStr, allowed_pattern)) {
     throw invalid_argument("Внимание! Строка содержит недопустимые символы. "
                            "Разрешены только цифры, 'x', "
                            "математические операторы(+, -, ^, =) и пробелы.");
   }
 
-  if (equationStr.find('x') == string::npos)
+   if (!equationStr.contains('x'))
     throw invalid_argument(
         "Внимание!: Уравнение должно содержать переменную 'x'");
 
-  if (equationStr.find('=') == string::npos)
+
+  if (equationStr.contains('=') == string::npos)
     throw invalid_argument("Внимание! Уравнение должно содержать знак '='");
 
-  if (equationStr.find("x^2") == string::npos &&
-      equationStr.find("x*x") == string::npos &&
-      equationStr.find("x**2") == string::npos) {
+  if (equationStr.contains("x^2") == string::npos &&
+      equationStr.contains("x*x") == string::npos &&
+      equationStr.contains("x**2") == string::npos) {
     throw invalid_argument(
         "Внимание! Уравнение должно быть квадратным (содержать x^2 или x*x)");
   }
@@ -128,7 +127,9 @@ void C::parseEquationFromString(const std::string &equationStr) {
 
   if (regex_search(equationStr, matches, equation_pattern) &&
       matches.size() == 4) {
-    double a_val = 1.0, b_val = 0.0, c_val = 0.0;
+    double a_val = 1.0;
+    double b_val = 0.0;
+    double c_val = 0.0;
 
     if (!matches[1].str().empty() && matches[1].str() != "+" &&
         matches[1].str() != "-") {

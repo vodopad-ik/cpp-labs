@@ -20,13 +20,11 @@ bool Program::run(int choice) const {
         "Внимание! Год должен быть в интервале от 1900 до 2025 года.");
     std::string color = Utils::inputOnlyLetters("Введите оттенок кузова: ");
 
-    // Используем init-statement в if
     if (Car newCar(plate, year, color); manager.addCar(newCar)) {
       std::cout << "Машина успешно добавлена!" << std::endl;
       newCar.display();
-    } else {
+    } else
       std::cout << "Ошибка: не удалось добавить машину!" << std::endl;
-    }
     break;
   }
   case 2: {
@@ -42,9 +40,8 @@ bool Program::run(int choice) const {
       car.display();
     }
 
-    if (count == 0) {
+    if (count == 0)
       std::cout << "Файл пуст или не существует!" << std::endl;
-    }
     break;
   }
   case 3: {
