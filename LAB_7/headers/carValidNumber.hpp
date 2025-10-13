@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <string_view> // Включаем для std::string_view
 
 class CarNumber {
 private:
@@ -10,11 +11,13 @@ private:
   static bool isValidDigit(char c);
   static bool isValidLetter(char c);
 
-  static bool checkLength(const std::string &formatted);
-  static bool checkFirstFourDigits(const std::string &formatted);
-  static bool checkLetters(const std::string &formatted,
-                           const std::string &validLetters);
-  static bool checkRegionCode(const std::string &formatted);
+  // Обновлена сигнатура: const std::string& заменено на std::string_view
+  static bool checkLength(std::string_view formatted);
+  static bool checkFirstFourDigits(std::string_view formatted);
+  
+  // Обновлена сигнатура: удален второй аргумент (validLetters)
+  static bool checkLetters(std::string_view formatted);
+  static bool checkRegionCode(std::string_view formatted);
 
   static void displayTemplate();
 
