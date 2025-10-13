@@ -4,7 +4,7 @@
 
 int Program::getValidChoice(int min, int max) const {
   int choice;
-  while (choice = Utils::inputIntegerInRange(
+  while (choice = Utils::inputIntInRange(
              "", min, max,
              "Выберите один из вариантов, представленных в меню!!!\n> "))
     ;
@@ -19,7 +19,7 @@ bool Program::run(int choice) const {
   case 1: {
     std::string plate = CarNumber::inputLicensePlate("Введите номер машины: ");
     std::cout << "Введите год выпуска: ";
-    int year = Utils::inputIntegerInRange(
+    int year = Utils::inputIntInRange(
         "", 1900, 2025,
         "Внимание! Год должен быть в интервале от 1900 до 2025 года.");
     std::string color = Utils::inputOnlyLetters("Введите оттенок кузова: ");
@@ -52,12 +52,11 @@ bool Program::run(int choice) const {
     break;
   }
   case 3: {
-    int year =
-        Utils::inputIntegerInRange("Введите год выпуска для поиска: ", 1900,
-                                   2025, "Год должен быть от 1900 до 2025.");
+    int year = Utils::inputIntInRange("Введите год выпуска для поиска: ", 1900,
+                                      2025, "Год должен быть от 1900 до 2025.");
     int count = manager.countCarsByYear(year);
     std::cout << "Количество машин " << year << " года выпуска: " << count
-         << std::endl;
+              << std::endl;
     break;
   }
   default:

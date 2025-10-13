@@ -17,14 +17,31 @@ void Utils::clearScreen() {
 #endif
 }
 
-int Utils::inputIntegerInRange(const std::string &message, int min_value,
-                               int max_value, const std::string &errorMessage) {
-  if (!message.empty())
+int Utils::inputInt(const std::string &message) {
+  if (!message.empty()) {
     std::cout << message;
-
+  }
   int number;
   while (true) {
     std::cin >> number;
+    if (std::cin.fail() || std::cin.peek() != '\n') {
+      std::cout
+          << "Некорректный ввод. Пожалуйста, введите только целое число.\n";
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    } else {
+      break;
+    }
+  }
+  return number;
+}
+
+int Utils::inputIntInRange(const std::string &message, int min_value,
+                           int max_value, const std::string &errorMessage) {
+  if (!message.empty())
+    std::cout << message;
+  while (true) {
+    int number = inputInt(message);
     if (std::cin.fail() || std::cin.peek() != '\n') {
       std::cout << "Некорректный ввод. Пожалуйста, введите целое число: ";
       clearInputBuffer();
@@ -59,7 +76,8 @@ bool Utils::isValidCharacter(unsigned char c) {
   bool isDigit = (c >= '0' && c <= '9');
 
   // Используем init-statement для проверки пунктуации
-  if (bool isPunctuation = std::ispunct(c) && c != '-'; isDigit || isPunctuation) {
+  if (bool isPunctuation = std::ispunct(c) && c != '-';
+      isDigit || isPunctuation) {
     return false;
   }
 
@@ -75,7 +93,8 @@ bool Utils::processCyrillicCharacter(std::string_view str, size_t &i) {
   return false;
 }
 
-bool Utils::validateStringCharacters(std::string_view str, bool &hasMeaningfulChars) {
+bool Utils::validateStringCharacters(std::string_view str,
+                                     bool &hasMeaningfulChars) {
   // Используем while для более безопасной обработки индекса
   size_t i = 0;
   while (i < str.length()) {
@@ -94,7 +113,7 @@ bool Utils::validateStringCharacters(std::string_view str, bool &hasMeaningfulCh
         return false; // Некорректный UTF-8 символ
       }
     }
-    
+
     i++; // Переходим к следующему символу
   }
   return true;
