@@ -9,6 +9,13 @@ private:
 
   static bool isValidDigit(char c);
   static bool isValidLetter(char c);
+
+  static bool checkLength(const std::string &formatted);
+  static bool checkFirstFourDigits(const std::string &formatted);
+  static bool checkLetters(const std::string &formatted,
+                           const std::string &validLetters);
+  static bool checkRegionCode(const std::string &formatted);
+
   static void displayTemplate();
 
 public:
