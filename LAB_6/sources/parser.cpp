@@ -33,7 +33,7 @@ std::string Parser::validateEquationString(const std::string &str) {
 void Parser::validateAllowedChars(const std::string &str) {
   const std::string allowed_chars = "0123456789+-*=^x. ";
   for (char c : str) {
-    if (allowed_chars.find(c) == std::string::npos) {
+    if (!allowed_chars.contains(c)) {
       throw std::invalid_argument(
           "Обнаружены запрещенные символы. Разрешены только "
           "цифры и следующие символы: '+', '-', '*', "
@@ -183,9 +183,8 @@ void Parser::parseB(string &simplified, double &b) {
   }
 }
 
-void Parser::parseC(std::string &simplified, double &c_val) {
-  // Параметр simplified остается как ссылка (не const),
-  // потому что метод изменяет его содержимое
+void Parser::parseC(const std::string &simplified, double &c_val) {
+  // Параметр simplified теперь const reference, так как мы не изменяем его
   if (!simplified.contains('='))
     return;
 
@@ -238,7 +237,6 @@ void Parser::parseC(std::string &simplified, double &c_val) {
               << ", справа: " << right_c << ")" << std::endl;
   }
 }
-
 bool Parser::isAFound(const std::string &simplified) {
   // Проверяем наличие x^2 в оригинальной строке (до парсинга)
   std::string temp = simplified;
