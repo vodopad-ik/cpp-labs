@@ -14,8 +14,7 @@ private:
 
 public:
   explicit C(double a_val, double b_val, double c_val);
-  explicit C(const std::string &equation);
-  explicit C();
+  explicit C(const std::string &equation = "");
   void setC(double val);
   double getC() const;
   std::complex<double> getX1() const;

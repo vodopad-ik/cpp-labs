@@ -10,20 +10,14 @@ C::C(double a_val, double b_val, double c_val) : B(a_val, b_val), c(c_val) {
     throw invalid_argument(
         "Коэффициент a не может быть равен нулю для квадратного уравнения");
 }
-C::C(const std::string &equation) : B(1.0, 0.0), c(0.0) {
+C::C(const std::string &equation) {
+  std::string equation_str =
+      equation.empty() ? Utils::inputString("Введите квадратное уравнение: ")
+                       : equation;
+
   double a;
   double b;
   double c_val;
-  Parser::parseEquationString(equation, a, b, c_val);
-  setA(a);
-  setB(b);
-  setC(c_val);
-}
-
-C::C() {
-  std::string equation_str =
-      Utils::inputString("Введите квадратное уравнение: ");
-  double a, b, c_val;
   Parser::parseEquationString(equation_str, a, b, c_val);
   setA(a);
   setB(b);

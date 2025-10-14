@@ -19,7 +19,7 @@ double Parser::parseNumber(const std::string &num_str, double default_value) {
   }
 }
 
-void Parser::validateEquationString(const std::string &str) {
+std::string Parser::validateEquationString(const std::string &str) {
   const std::string allowed_chars = "0123456789+-*=^x. ";
   for (char c : str) {
     if (allowed_chars.find(c) == std::string::npos) {
@@ -35,9 +35,13 @@ void Parser::validateEquationString(const std::string &str) {
   std::transform(simplified.begin(), simplified.end(), simplified.begin(),
                  ::tolower);
 
-  bool has_x2 = simplified.find("x^2") != std::string::npos;
-  bool has_equals = simplified.find('=') != std::string::npos;
+  // ДЛЯ ОТЛАДКИ
+  std::cout << "DEBUG: simplified = '" << simplified << "'" << std::endl;
 
+  bool has_x2 = simplified.contains("x^2");
+  bool has_equals = simplified.contains('=');
+  
+  std::cout << "DEBUG: has_x2 = " << has_x2 << ", has_equals = " << has_equals << std::endl;
 
   if (!has_x2) {
     throw std::invalid_argument(
@@ -96,18 +100,12 @@ void Parser::validateEquationString(const std::string &str) {
   if (!has_digit) {
     throw std::invalid_argument("Строка должна содержать хотя бы одну цифру");
   }
+  return simplified;
 }
 
 void Parser::parseEquationString(const std::string &equationStr, double &a,
                                  double &b, double &c) {
-  validateEquationString(equationStr);
-  string simplified = equationStr;
-
-  // Предварительная обработка строки
-  simplified.erase(remove(simplified.begin(), simplified.end(), ' '),
-                   simplified.end());
-  transform(simplified.begin(), simplified.end(), simplified.begin(),
-            ::tolower);
+  string simplified = validateEquationString(equationStr);
 
   cout << "Упрощенная строка: " << simplified << endl;
 
@@ -131,7 +129,7 @@ void Parser::parseEquationString(const std::string &equationStr, double &a,
 }
 
 void Parser::parseA(string &simplified, double &a) {
-  std::regex a_pattern(R"(([+-]?\d*\.?\d+)x\^2)"); // исправлено: \d* вместо \d+
+  std::regex a_pattern(R"(([+-]?\d*\.?\d+)x\^2)");
   std::smatch a_match;
 
   if (std::regex_search(simplified, a_match, a_pattern) && a_match.size() > 1) {
@@ -143,11 +141,18 @@ void Parser::parseA(string &simplified, double &a) {
     std::cout << "Строка после удаления a: " << simplified << std::endl;
   } else {
     // Если не нашли явный коэффициент, проверяем наличие x^2 без коэффициента
-    if (simplified.contains("x^2") != std::string::npos) {
-      a = 1.0; // коэффициент по умолчанию
-      simplified = std::regex_replace(simplified, std::regex(R"(x\^2)"), "");
-      std::cout << "Найден коэффициент a по умолчанию: 1.0" << std::endl;
+    // НО ТОЛЬКО ЕСЛИ ЕСТЬ ТОЧНО "x^2", а не просто "x" или цифры
+    std::regex x2_default_pattern(R"(([+-]?)x\^2)");
+    if (std::regex_search(simplified, a_match, x2_default_pattern) &&
+        a_match.size() > 1) {
+      std::string sign = a_match[1].str();
+      a = (sign == "-") ? -1.0 : 1.0;
+      std::cout << "Найден коэффициент a по умолчанию: " << a << std::endl;
+      simplified = std::regex_replace(simplified, x2_default_pattern, "");
+      std::cout << "Строка после удаления a: " << simplified << std::endl;
     }
+    // Если не нашли x^2 вообще - НИЧЕГО НЕ ДЕЛАЕМ, a остается 1.0
+    // Ошибка уже должна быть поймана в validateEquationString
   }
 }
 
@@ -167,53 +172,58 @@ void Parser::parseB(string &simplified, double &b) {
 }
 
 void Parser::parseC(std::string &simplified, double &c_val) {
-  // Находим позицию знака равенства
-  size_t equal_pos = simplified.find('=');
-  if (equal_pos == std::string::npos)
+  // Проверяем наличие знака равенства
+  if (!simplified.contains('='))
     return;
 
-  // Разделяем на левую и правую части
-  std::string left_part = simplified.substr(0, equal_pos);
-  std::string right_part = simplified.substr(equal_pos + 1);
+  // Разделяем на левую и правую части используя regex
+  std::regex equal_pattern(R"((.*)=(.*))");
+  std::smatch match;
 
-  std::cout << "Левая часть: '" << left_part << "'" << std::endl;
-  std::cout << "Правая часть: '" << right_part << "'" << std::endl;
+  if (std::regex_match(simplified, match, equal_pattern) && match.size() == 3) {
+    std::string left_part = match[1].str();
+    std::string right_part = match[2].str();
 
-  // Обрабатываем левую часть (свободные члены)
-  double left_c = 0.0;
-  if (!left_part.empty()) {
-    if (left_part == "+") {
-      left_c = 1.0;
-    } else if (left_part == "-") {
-      left_c = -1.0;
-    } else if (isValidNumber(left_part)) {
-      left_c = Utils::stringToDouble(left_part);
-    } else if (!left_part.empty()) {
-      throw std::invalid_argument(
-          "Недопустимые символы в свободном члене слева: '" + left_part + "'");
+    std::cout << "Левая часть: '" << left_part << "'" << std::endl;
+    std::cout << "Правая часть: '" << right_part << "'" << std::endl;
+
+    // Обрабатываем левую часть (свободные члены)
+    double left_c = 0.0;
+    if (!left_part.empty()) {
+      if (left_part == "+") {
+        left_c = 1.0;
+      } else if (left_part == "-") {
+        left_c = -1.0;
+      } else if (isValidNumber(left_part)) {
+        left_c = Utils::stringToDouble(left_part);
+      } else if (!left_part.empty()) {
+        throw std::invalid_argument(
+            "Недопустимые символы в свободном члене слева: '" + left_part +
+            "'");
+      }
     }
-  }
 
-  // Обрабатываем правую часть (свободные члены)
-  double right_c = 0.0;
-  if (!right_part.empty()) {
-    if (right_part == "+") {
-      right_c = 1.0;
-    } else if (right_part == "-") {
-      right_c = -1.0;
-    } else if (isValidNumber(right_part)) {
-      right_c = Utils::stringToDouble(right_part);
-    } else if (!right_part.empty()) {
-      throw std::invalid_argument(
-          "Недопустимые символы в свободном члене справа: '" + right_part +
-          "'");
+    // Обрабатываем правую часть (свободные члены)
+    double right_c = 0.0;
+    if (!right_part.empty()) {
+      if (right_part == "+") {
+        right_c = 1.0;
+      } else if (right_part == "-") {
+        right_c = -1.0;
+      } else if (isValidNumber(right_part)) {
+        right_c = Utils::stringToDouble(right_part);
+      } else if (!right_part.empty()) {
+        throw std::invalid_argument(
+            "Недопустимые символы в свободном члене справа: '" + right_part +
+            "'");
+      }
     }
-  }
 
-  // Переносим все в левую часть: c = left_c - right_c
-  c_val = left_c - right_c;
-  std::cout << "Найден коэффициент c: " << c_val << " (слева: " << left_c
-            << ", справа: " << right_c << ")" << std::endl;
+    // Переносим все в левую часть: c = left_c - right_c
+    c_val = left_c - right_c;
+    std::cout << "Найден коэффициент c: " << c_val << " (слева: " << left_c
+              << ", справа: " << right_c << ")" << std::endl;
+  }
 }
 
 bool Parser::isAFound(const std::string &simplified) {

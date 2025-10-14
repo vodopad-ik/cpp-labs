@@ -15,7 +15,7 @@ private:
   static bool isValidNumber(const std::string &str);
 
 public:
-  static void validateEquationString(const std::string &str);
+  static std::string validateEquationString(const std::string &str);
   static void parseEquationString(const std::string &equationStr, double &a,
                                   double &b, double &c);
 };
