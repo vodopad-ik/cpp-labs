@@ -6,6 +6,13 @@
 class Parser {
 private:
   Parser() = delete;
+  static void validateAllowedChars(const std::string &str);
+  static std::string simplifyString(const std::string &str);
+  static void validateBasicStructure(const std::string &simplified);
+  static void validateRegexPatterns(const std::string &str);
+  static void validateDigitsAndDots(const std::string &str);
+  static void validateDotPosition(const std::string &str, size_t pos);
+  
   static void parseA(std::string &simplified, double &a);
   static void parseB(std::string &simplified, double &b);
   static void parseC(std::string &simplified, double &c_val);

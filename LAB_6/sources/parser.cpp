@@ -20,63 +20,96 @@ double Parser::parseNumber(const std::string &num_str, double default_value) {
 }
 
 std::string Parser::validateEquationString(const std::string &str) {
-  const std::string allowed_chars = "0123456789+-*=^x. ";
-  for (char c : str) {
-    if (allowed_chars.contains(c)) {
-      throw std::invalid_argument(
-          "Обнаружены запрещенные символы. Разрешены только "
-          "цифры и следующие символы: '+', '-', '*', "
-          "'=', '^', 'x', '.'.");
+    validateAllowedChars(str);
+    string simplified = simplifyString(str);
+    
+    validateBasicStructure(simplified);
+    validateRegexPatterns(str);
+    validateDigitsAndDots(str);
+    
+    return simplified;
+}
+
+void Parser::validateAllowedChars(const std::string &str) {
+    const std::string allowed_chars = "0123456789+-*=^x. ";
+    for (char c : str) {
+        if (allowed_chars.find(c) == std::string::npos) {
+            throw std::invalid_argument(
+                "Обнаружены запрещенные символы. Разрешены только "
+                "цифры и следующие символы: '+', '-', '*', "
+                "'=', '^', 'x', '.'.");
+        }
     }
-  }
-  string simplified = str;
-  simplified.erase(std::remove(simplified.begin(), simplified.end(), ' '),
-                   simplified.end());
-  std::transform(simplified.begin(), simplified.end(), simplified.begin(),
-                 ::tolower);
+}
 
-  bool has_x2 = simplified.contains("x^2");
-  bool has_equals = simplified.contains('=');
+std::string Parser::simplifyString(const std::string &str) {
+    string simplified = str;
+    simplified.erase(std::remove(simplified.begin(), simplified.end(), ' '), simplified.end());
+    std::transform(simplified.begin(), simplified.end(), simplified.begin(), ::tolower);
+    return simplified;
+}
 
-  if (!has_x2)
-    throw std::invalid_argument(
-        "Это не квадратное уравнение. Должен быть член с x^2");
-  if (!has_equals)
-    throw std::invalid_argument("Уравнение должно содержать знак '='");
-  if (std::regex_search(simplified, std::regex(R"(x\^2\d)")))
-    throw std::invalid_argument(
-        "Некорректный формат: после x^2 не должно быть цифр без оператора");
+void Parser::validateBasicStructure(const std::string &simplified) {
+    if (!simplified.contains("x^2")) {
+        throw std::invalid_argument("Это не квадратное уравнение. Должен быть член с x^2");
+    }
+    
+    if (!simplified.contains('=')) {
+        throw std::invalid_argument("Уравнение должно содержать знак '='");
+    }
+    
+    if (std::regex_search(simplified, std::regex(R"(x\^2\d)"))) {
+        throw std::invalid_argument("Некорректный формат: после x^2 не должно быть цифр без оператора");
+    }
+}
 
-  std::regex multiple_dots(R"(\d+\.\d+\.\d+)");
-  if (regex_search(str, multiple_dots))
-    throw std::invalid_argument("Обнаружены числа с несколькими точками");
-  if (regex_search(str, std::regex(R"(\*[^x])")))
-    throw std::invalid_argument("Некорректное использование символа '*'");
-  if (regex_search(str, std::regex(R"(\^[^2])")))
-    throw std::invalid_argument("Некорректное использование символа '^'");
-  if (regex_search(str, std::regex(R"([+-]{2,})")))
-    throw std::invalid_argument(
-        "Некорректная последовательность знаков '+' и '-'");
+void Parser::validateRegexPatterns(const std::string &str) {
+    const std::vector<std::pair<std::regex, std::string>> patterns = {
+        {std::regex(R"(\d+\.\d+\.\d+)"), "Обнаружены числа с несколькими точками"},
+        {std::regex(R"(\*[^x])"), "Некорректное использование символа '*'"},
+        {std::regex(R"(\^[^2])"), "Некорректное использование символа '^'"},
+        {std::regex(R"([+-]{2,})"), "Некорректная последовательность знаков '+' и '-'"}
+    };
+    
+    for (const auto& [pattern, error_msg] : patterns) {
+        if (regex_search(str, pattern)) {
+            throw std::invalid_argument(error_msg);
+        }
+    }
+}
 
-  bool has_digit = false;
-  for (size_t i = 0; i < str.length(); i++) {
-    char current_char = str[i];
-    if (isdigit(current_char))
-      has_digit = true;
+void Parser::validateDigitsAndDots(const std::string &str) {
+    bool has_digit = false;
+    
+    for (size_t i = 0; i < str.length(); i++) {
+        char current_char = str[i];
+        
+        if (isdigit(current_char)) {
+            has_digit = true;
+        }
+        
+        if (current_char == '.') {
+            validateDotPosition(str, i);
+        }
+    }
+    
+    if (!has_digit) {
+        throw std::invalid_argument("Строка должна содержать хотя бы одну цифру");
+    }
+}
 
-    if (current_char == '.') {
-      if (i == 0 || i == str.length() - 1)
+void Parser::validateDotPosition(const std::string &str, size_t pos) {
+    if (pos == 0 || pos == str.length() - 1) {
         throw std::invalid_argument("Некорректное использование точки в числе");
-      if (!isdigit(str[i - 1]))
+    }
+    
+    if (!isdigit(str[pos - 1])) {
         throw std::invalid_argument("Перед точкой должна быть цифра");
-
-      if (i + 1 < str.length() && !isdigit(str[i + 1]))
+    }
+    
+    if (pos + 1 < str.length() && !isdigit(str[pos + 1])) {
         throw std::invalid_argument("После точки должна быть цифра");
     }
-  }
-  if (!has_digit)
-    throw std::invalid_argument("Строка должна содержать хотя бы одну цифру");
-  return simplified;
 }
 
 void Parser::parseEquationString(const std::string &equationStr, double &a,
