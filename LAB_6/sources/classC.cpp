@@ -20,7 +20,7 @@ C::C(const std::string &equation) : B(1.0, 0.0), c(0.0) {
   setC(c_val);
 }
 
-C::C() : B(1.0, 0.0), c(0.0) {
+C::C() {
   std::string equation_str =
       Utils::inputString("Введите квадратное уравнение: ");
   double a, b, c_val;

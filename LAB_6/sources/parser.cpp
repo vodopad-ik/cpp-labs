@@ -22,23 +22,22 @@ double Parser::parseNumber(const std::string &num_str, double default_value) {
 void Parser::validateEquationString(const std::string &str) {
   const std::string allowed_chars = "0123456789+-*=^x. ";
   for (char c : str) {
-    if (allowed_chars.contains(c) == std::string::npos) {
+    if (allowed_chars.find(c) == std::string::npos) {
       throw std::invalid_argument(
           "Обнаружены запрещенные символы. Разрешены только "
-          "цифры, математические символы и следующие символы: '+', '-', '*', "
+          "цифры и следующие символы: '+', '-', '*', "
           "'=', '^', 'x', '.'.");
     }
   }
-
-  // Проверка что это КВАДРАТНОЕ уравнение (должен быть x^2)
   string simplified = str;
   simplified.erase(std::remove(simplified.begin(), simplified.end(), ' '),
                    simplified.end());
   std::transform(simplified.begin(), simplified.end(), simplified.begin(),
                  ::tolower);
 
-  bool has_x2 = simplified.contains("x^2") != std::string::npos;
-  bool has_equals = simplified.contains('=') != std::string::npos;
+  bool has_x2 = simplified.find("x^2") != std::string::npos;
+  bool has_equals = simplified.find('=') != std::string::npos;
+
 
   if (!has_x2) {
     throw std::invalid_argument(
@@ -48,8 +47,6 @@ void Parser::validateEquationString(const std::string &str) {
   if (!has_equals) {
     throw std::invalid_argument("Уравнение должно содержать знак '='");
   }
-
-  // Проверка на корректный формат x^2 (не должно быть чисел сразу после x^2)
   if (std::regex_search(simplified, std::regex(R"(x\^2\d)"))) {
     throw std::invalid_argument(
         "Некорректный формат: после x^2 не должно быть цифр без оператора");
@@ -169,39 +166,54 @@ void Parser::parseB(string &simplified, double &b) {
   }
 }
 
-void Parser::parseC(std::string_view simplified, double &c_val) {
-  size_t equal_pos = simplified.contains('=');
+void Parser::parseC(std::string &simplified, double &c_val) {
+  // Находим позицию знака равенства
+  size_t equal_pos = simplified.find('=');
   if (equal_pos == std::string::npos)
     return;
 
-  std::string before_equal = std::string(simplified.substr(0, equal_pos));
+  // Разделяем на левую и правую части
+  std::string left_part = simplified.substr(0, equal_pos);
+  std::string right_part = simplified.substr(equal_pos + 1);
 
-  // Если строка пустая после удаления a и b, то c = 0
-  if (before_equal.empty()) {
-    c_val = 0.0;
-    std::cout << "Коэффициент c по умолчанию: 0.0" << std::endl;
-    return;
-  }
+  std::cout << "Левая часть: '" << left_part << "'" << std::endl;
+  std::cout << "Правая часть: '" << right_part << "'" << std::endl;
 
-  std::cout << "Остаток перед '=': '" << before_equal << "'" << std::endl;
-
-  // Проверяем, что остались только допустимые символы для числа
-  const std::string allowed_c_chars = "+-0123456789.";
-  for (char c : before_equal) {
-    if (allowed_c_chars.contains(c) == std::string::npos) {
-      throw std::invalid_argument("Недопустимые символы в свободном члене: '" +
-                                  before_equal + "'");
+  // Обрабатываем левую часть (свободные члены)
+  double left_c = 0.0;
+  if (!left_part.empty()) {
+    if (left_part == "+") {
+      left_c = 1.0;
+    } else if (left_part == "-") {
+      left_c = -1.0;
+    } else if (isValidNumber(left_part)) {
+      left_c = Utils::stringToDouble(left_part);
+    } else if (!left_part.empty()) {
+      throw std::invalid_argument(
+          "Недопустимые символы в свободном члене слева: '" + left_part + "'");
     }
   }
 
-  // Проверяем, что это валидное число
-  if (!isValidNumber(before_equal)) {
-    throw std::invalid_argument("Свободный член должен быть одним числом: '" +
-                                before_equal + "'");
+  // Обрабатываем правую часть (свободные члены)
+  double right_c = 0.0;
+  if (!right_part.empty()) {
+    if (right_part == "+") {
+      right_c = 1.0;
+    } else if (right_part == "-") {
+      right_c = -1.0;
+    } else if (isValidNumber(right_part)) {
+      right_c = Utils::stringToDouble(right_part);
+    } else if (!right_part.empty()) {
+      throw std::invalid_argument(
+          "Недопустимые символы в свободном члене справа: '" + right_part +
+          "'");
+    }
   }
 
-  c_val = Utils::stringToDouble(before_equal);
-  std::cout << "Найден коэффициент c: " << c_val << std::endl;
+  // Переносим все в левую часть: c = left_c - right_c
+  c_val = left_c - right_c;
+  std::cout << "Найден коэффициент c: " << c_val << " (слева: " << left_c
+            << ", справа: " << right_c << ")" << std::endl;
 }
 
 bool Parser::isAFound(const std::string &simplified) {
