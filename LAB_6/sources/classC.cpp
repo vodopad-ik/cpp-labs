@@ -26,14 +26,16 @@ std::complex<double> C::getX2() const { return x2; }
 void C::printEquation() const {
   double a = getA();
   double b = getB();
-  cout << a << "x^2" << (b > 0 ? " + " : " - ") << abs(b) << 'x'
-       << (c > 0 ? " + " : " - ") << abs(c) << " = 0" << endl;
+  cout << a << "x^2" << (b < 0 ? " - " : " + ") << abs(b) << 'x'
+       << (c < 0 ? " - " : " + ") << abs(c) << " = 0" << endl;
 }
 
 void C::printComplex(const complex<double> &z) const {
   double re = z.real();
   double im = z.imag();
 
+  if (re == 0)
+    re = 0;
   cout << re;
   if (im > 0) {
     cout << " + " << im << "i";
@@ -100,60 +102,76 @@ void C::printSolve() const {
 }
 
 void C::validateEquationString(const std::string &str) {
-  const string allowed_сhars = "0123456789+-*=^xX. "
+  const std::string allowed_chars = "0123456789+-*=^x. ";
   for (char c : str) {
-    if (allowed_сhars.find(c) == string::npos) {
-      throw invalid_argument("Обнаружены запрещенные символы. Разрешены только "
-                             "цифры, латинские буквы, математические символы и "
-                             "точка для вещественных чисел: + - * = ^ x ( ) .");
+    if (allowed_chars.find(c) == std::string::npos) {
+      throw std::invalid_argument(
+          "Обнаружены запрещенные символы. Разрешены только "
+          "цифры, математические символы и следующие символы: '+', '-', '*', "
+          "'=', '^', 'x', '.'.");
     }
   }
 
-  // Проверка на корректное использование точки (для вещественных чисел)
-  bool hasDigit = false;
+  // Проверка на множественные точки в числах
+  regex multiple_dots(R"(\d+\.\d+\.\d+)"); // два или более точек в числе
+  if (regex_search(str, multiple_dots)) {
+    throw std::invalid_argument("Обнаружены числа с несколькими точками");
+  }
+
+  // Проверка на некорректные комбинации символов
+  if (regex_search(str, regex(R"(\*[^x])"))) {
+    throw std::invalid_argument("Некорректное использование символа '*'");
+  }
+
+  if (regex_search(str, regex(R"(\^[^2])"))) {
+    throw std::invalid_argument("Некорректное использование символа '^'");
+  }
+
+  if (regex_search(str, regex(R"([+-]{2,})"))) {
+    throw std::invalid_argument(
+        "Некорректная последовательность знаков '+' и '-'");
+  }
+
+  bool has_digit = false;
   for (size_t i = 0; i < str.length(); i++) {
-    char c = str[i];
+    char current_char = str[i];
 
-    if (isdigit(c)) {
-      hasDigit = true;
+    if (isdigit(current_char)) {
+      has_digit = true;
     }
 
-    // Проверяем, что точка используется правильно (между цифрами или после
-    // цифры)
-    if (c == '.') {
-      // Точка не может быть в начале или конце числа
+    if (current_char == '.') {
       if (i == 0 || i == str.length() - 1) {
-        throw invalid_argument("Некорректное использование точки в числе");
+        throw std::invalid_argument("Некорректное использование точки в числе");
       }
-      // Перед точкой должна быть цифра
       if (!isdigit(str[i - 1])) {
-        throw invalid_argument("Перед точкой должна быть цифра");
+        throw std::invalid_argument("Перед точкой должна быть цифра");
       }
-      // После точки должна быть цифра
       if (i + 1 < str.length() && !isdigit(str[i + 1])) {
-        throw invalid_argument("После точки должна быть цифра");
+        throw std::invalid_argument("После точки должна быть цифра");
       }
     }
   }
 
-  if (!hasDigit) {
-    throw invalid_argument("Строка должна содержать хотя бы одну цифру");
+  if (!has_digit) {
+    throw std::invalid_argument("Строка должна содержать хотя бы одну цифру");
   }
 }
 
-void C::parseEquationString(const string &equationStr) {
+void C::parseEquationString(const std::string &equationStr) {
   validateEquationString(equationStr);
-  string simplified = equationStr;
+  std::string simplified = equationStr;
 
   // Предварительная обработка строки
-  simplified.erase(remove(simplified.begin(), simplified.end(), ' '),
-                   simplified.end());
-  transform(simplified.begin(), simplified.end(), simplified.begin(),
-            ::tolower);
+  std::erase(simplified, ' ');
+  std::transform(simplified.begin(), simplified.end(), simplified.begin(),
+                 ::tolower);
 
-  cout << "Упрощенная строка: " << simplified << endl;
+  std::cout << "Упрощенная строка: " << simplified << std::endl;
 
-  double a = 1.0, b = 0.0, c_val = 0.0;
+  double a = 1.0;
+  double b = 0.0;
+  double c_val = 0.0;
 
   // Парсим коэффициенты по очереди
   parseA(simplified, a);
@@ -162,8 +180,8 @@ void C::parseEquationString(const string &equationStr) {
 
   // Проверяем, что уравнение квадратное (есть x^2)
   if (!isAFound(simplified)) {
-    throw invalid_argument("Не удалось распознать квадратное уравнение. "
-                           "Убедитесь, что есть член с x^2");
+    throw std::invalid_argument("Не удалось распознать квадратное уравнение. "
+                                "Убедитесь, что есть член с x^2");
   }
 
   // Устанавливаем коэффициенты
@@ -171,8 +189,8 @@ void C::parseEquationString(const string &equationStr) {
   setB(b);
   setC(c_val);
 
-  cout << "Распознанные коэффициенты: a=" << a << ", b=" << b << ", c=" << c_val
-       << endl;
+  std::cout << "Распознанные коэффициенты: a=" << a << ", b=" << b
+            << ", c=" << c_val << std::endl;
 }
 
 // Вспомогательные приватные методы для парсинга
@@ -204,26 +222,38 @@ void C::parseB(string &simplified, double &b) {
   }
 }
 
-void C::parseC(const string &simplified, double &c_val) {
+void C::parseC(std::string_view simplified, double &c_val) {
   size_t equal_pos = simplified.find('=');
-  if (equal_pos == string::npos)
+  if (equal_pos == std::string::npos)
     return;
 
-  string before_equal = simplified.substr(0, equal_pos);
-  cout << "Остаток перед '=': '" << before_equal << "'" << endl;
+  std::string before_equal = std::string(simplified.substr(0, equal_pos));
+  std::cout << "Остаток перед '=': '" << before_equal << "'" << std::endl;
 
-  if (!before_equal.empty() && before_equal != "+" && before_equal != "-") {
-    try {
-      c_val = Utils::stringToDouble(before_equal);
-      cout << "Найден коэффициент c: " << c_val << endl;
-    } catch (const exception &e) {
-      cout << "Не удалось распознать c: " << before_equal << " (" << e.what()
-           << ")" << endl;
+  // Если после парсинга a и b остались символы кроме допустимых для числа c
+  if (!before_equal.empty()) {
+    // Допустимые символы для коэффициента c (только число)
+    const std::string allowed_c_chars = "+-0123456789.";
+
+    for (char c : before_equal) {
+      if (allowed_c_chars.find(c) == std::string::npos) {
+        throw std::invalid_argument(
+            "Недопустимые символы в свободном члене: '" + before_equal + "'");
+      }
     }
+
+    // Проверяем, что это валидное число (не несколько чисел с операциями)
+    if (!isValidNumber(before_equal)) {
+      throw std::invalid_argument("Свободный член должен быть одним числом: '" +
+                                  before_equal + "'");
+    }
+
+    c_val = Utils::stringToDouble(before_equal);
+    std::cout << "Найден коэффициент c: " << c_val << std::endl;
   }
 }
 
-double C::parseNumber(const string &num_str, double default_value) {
+double C::parseNumber(const std::string &num_str, double default_value) {
   if (num_str.empty() || num_str == "+")
     return default_value;
   if (num_str == "-")
@@ -231,13 +261,41 @@ double C::parseNumber(const string &num_str, double default_value) {
 
   try {
     return Utils::stringToDouble(num_str);
-  } catch (const exception &e) {
-    throw invalid_argument("Некорректный числовой формат: '" + num_str + "'");
+  } catch (const std::exception &) {
+    throw std::invalid_argument("Некорректный числовой формат: '" + num_str +
+                                "'");
   }
 }
 
 bool C::isAFound(const string &simplified) {
   // Проверяем наличие x^2 в упрощенной строке
-  return simplified.find("x^2") != string::npos ||
+  return simplified.contains("x^2") != string::npos ||
          regex_search(simplified, regex(R"(([+-]?\d+\.?\d*)x\^2)"));
+}
+
+bool C::isValidNumber(const std::string &str) {
+  if (str.empty())
+    return false;
+
+  int dotCount = 0;
+  bool hasDigits = false;
+
+  for (size_t i = 0; i < str.length(); i++) {
+    char c = str[i];
+
+    if (c == '.') {
+      dotCount++;
+      if (dotCount > 1)
+        return false;
+    } else if (c == '-' || c == '+') {
+      if (i != 0)
+        return false;
+    } else if (isdigit(c)) {
+      hasDigits = true;
+    } else {
+      return false;
+    }
+  }
+
+  return hasDigits && dotCount <= 1;
 }

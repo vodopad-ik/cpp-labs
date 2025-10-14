@@ -2,6 +2,7 @@
 #include "classA.hpp"
 #include "classB.hpp"
 #include <complex>
+#include <string_view>
 
 class C : public B {
 private:
@@ -15,9 +16,10 @@ private:
 
   void parseA(std::string &simplified, double &a);
   void parseB(std::string &simplified, double &b);
-  void parseC(const std::string &simplified, double &c_val);
+  void parseC(std::string_view simplified, double &c_val);
   double parseNumber(const std::string &num_str, double default_value = 1.0);
   bool isAFound(const std::string &simplified);
+  bool isValidNumber(const std::string &str);
 
 public:
   explicit C(double a_val, double b_val, double c_val);
