@@ -1,5 +1,4 @@
 #include <iostream>
-#include "classA.hpp"
 #include "classB.hpp"
 using namespace std;
 

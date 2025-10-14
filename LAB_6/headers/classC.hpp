@@ -1,6 +1,7 @@
 #pragma once
 #include "classA.hpp"
 #include "classB.hpp"
+#include "parser.hpp"
 #include <complex>
 #include <string_view>
 
@@ -10,16 +11,6 @@ private:
   std::complex<double> x1;
   std::complex<double> x2;
   bool is_solve = false;
-
-  void validateEquationString(const std::string &str);
-  void parseEquationString(const std::string &eq);
-
-  void parseA(std::string &simplified, double &a);
-  void parseB(std::string &simplified, double &b);
-  void parseC(std::string_view simplified, double &c_val);
-  double parseNumber(const std::string &num_str, double default_value = 1.0);
-  bool isAFound(const std::string &simplified);
-  bool isValidNumber(const std::string &str);
 
 public:
   explicit C(double a_val, double b_val, double c_val);
