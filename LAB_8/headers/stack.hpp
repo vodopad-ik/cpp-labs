@@ -32,7 +32,7 @@ public:
     }
   }
 
-  // Правило пяти
+  // Правило пяти - все специальные функции явно определены
   Stack(const Stack &other) {
     if (!other.empty()) {
       Stack<T> temp;
@@ -60,7 +60,11 @@ public:
   
   Stack(Stack &&other) noexcept = default;
   Stack &operator=(Stack &&other) noexcept = default;
-  ~Stack() = default;
+  
+  // Явный деструктор для участия в управлении ресурсами
+  ~Stack() {
+    clear();
+  }
 
   // Основные операции
   void push(const T &value) {
