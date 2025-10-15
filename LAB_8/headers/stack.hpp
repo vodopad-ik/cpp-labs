@@ -26,13 +26,19 @@ private:
 public:
   Stack() = default;
   
+  // Деструктор
+  // Уникальный указатель (std::unique_ptr) автоматически управляет освобождением
+  // всех узлов при удалении `top_node`, поэтому явная логика очистки не нужна,
+  // но мы определяем деструктор, чтобы показать участие в управлении ресурсами.
+  ~Stack() = default; 
+  
   Stack(std::initializer_list<T> init) {
     for (const auto& item : init) {
       push(item);
     }
   }
 
-  // Правило пяти - все специальные функции явно определены
+  // Правило пяти
   Stack(const Stack &other) {
     if (!other.empty()) {
       Stack<T> temp;
@@ -43,7 +49,8 @@ public:
       }
       
       while (!temp.empty()) {
-        push(temp.top());
+        // Элементы добавляются в обратном порядке, чтобы сохранить порядок
+        push(temp.top()); 
         temp.pop();
       }
     }
@@ -58,22 +65,28 @@ public:
     return *this;
   }
   
-  Stack(Stack &&other) noexcept = default;
-  Stack &operator=(Stack &&other) noexcept = default;
+  Stack(Stack &&other) noexcept : top_node(std::move(other.top_node)), size_(other.size_) {
+    other.size_ = 0;
+  }
   
-  // Явный деструктор для участия в управлении ресурсами
-  ~Stack() {
-    clear();
+  Stack &operator=(Stack &&other) noexcept {
+    if (this != &other) {
+      top_node = std::move(other.top_node);
+      size_ = other.size_;
+      other.size_ = 0;
+    }
+    return *this;
   }
 
   // Основные операции
+  
   void push(const T &value) {
     auto new_node = std::make_unique<Node>(value);
     new_node->next = std::move(top_node);
     top_node = std::move(new_node);
     size_++;
   }
-  
+
   void pop() {
     if (empty()) {
       throw StackEmptyException();
@@ -81,7 +94,7 @@ public:
     top_node = std::move(top_node->next);
     size_--;
   }
-  
+
   T &top() {
     if (empty()) {
       throw StackEmptyException();
@@ -95,22 +108,23 @@ public:
     }
     return top_node->data;
   }
-  
+
   bool empty() const {
     return top_node == nullptr;
   }
-  
-  size_t size() const { 
-    return size_; 
-  }
-  
-  void clear() {
-    while (!empty()) {
-      pop();
-    }
+
+  size_t size() const {
+    return size_;
   }
 
-  // Итератор
+  void clear() {
+    // std::unique_ptr<Node> top_node = nullptr;
+    // Фактически, достаточно просто сбросить unique_ptr.
+    top_node.reset(); 
+    size_ = 0;
+  }
+
+  // Итераторы
   class Iterator {
   private:
     Node *current;
@@ -177,4 +191,6 @@ public:
 
   ConstIterator begin() const { return ConstIterator(top_node.get()); }
   ConstIterator end() const { return ConstIterator(nullptr); }
+  ConstIterator cbegin() const { return ConstIterator(top_node.get()); }
+  ConstIterator cend() const { return ConstIterator(nullptr); }
 };
