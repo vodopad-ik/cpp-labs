@@ -2,39 +2,109 @@
 
 #include <iostream>
 #include <memory>
+#include <stdexcept>
+
+// Специализированное исключение для стека
+class StackEmptyException : public std::runtime_error {
+public:
+    StackEmptyException() : std::runtime_error("Stack is empty") {}
+};
 
 template <typename T> 
 class Stack {
 private:
   struct Node {
     T data;
-    std::unique_ptr<Node> next = nullptr; // In-class initializer
+    std::unique_ptr<Node> next = nullptr;
     
-    explicit Node(const T &value) : data(value) {} // explicit keyword, removed next from initializer list
+    explicit Node(const T &value) : data(value) {}
   };
 
   std::unique_ptr<Node> top_node = nullptr;
   size_t size_ = 0;
 
 public:
-  Stack() = default; // Use =default
-  Stack(std::initializer_list<T> init);
+  Stack() = default;
+  
+  Stack(std::initializer_list<T> init) {
+    for (const auto& item : init) {
+      push(item);
+    }
+  }
 
   // Правило пяти
-  Stack(const Stack &other);
-  Stack &operator=(const Stack &other);
+  Stack(const Stack &other) {
+    if (!other.empty()) {
+      Stack<T> temp;
+      const Node *current = other.top_node.get();
+      while (current) {
+        temp.push(current->data);
+        current = current->next.get();
+      }
+      
+      while (!temp.empty()) {
+        push(temp.top());
+        temp.pop();
+      }
+    }
+  }
+  
+  Stack &operator=(const Stack &other) {
+    if (this != &other) {
+      clear();
+      Stack<T> temp(other);
+      *this = std::move(temp);
+    }
+    return *this;
+  }
+  
   Stack(Stack &&other) noexcept = default;
   Stack &operator=(Stack &&other) noexcept = default;
-  ~Stack() = default; // Use =default
+  ~Stack() = default;
 
   // Основные операции
-  void push(const T &value);
-  void pop();
-  T &top();
-  const T &top() const;
-  bool empty() const;
-  size_t size() const;
-  void clear();
+  void push(const T &value) {
+    auto new_node = std::make_unique<Node>(value);
+    new_node->next = std::move(top_node);
+    top_node = std::move(new_node);
+    size_++;
+  }
+  
+  void pop() {
+    if (empty()) {
+      throw StackEmptyException();
+    }
+    top_node = std::move(top_node->next);
+    size_--;
+  }
+  
+  T &top() {
+    if (empty()) {
+      throw StackEmptyException();
+    }
+    return top_node->data;
+  }
+  
+  const T &top() const {
+    if (empty()) {
+      throw StackEmptyException();
+    }
+    return top_node->data;
+  }
+  
+  bool empty() const {
+    return top_node == nullptr;
+  }
+  
+  size_t size() const { 
+    return size_; 
+  }
+  
+  void clear() {
+    while (!empty()) {
+      pop();
+    }
+  }
 
   // Итератор
   class Iterator {
@@ -64,8 +134,7 @@ public:
       return temp;
     }
 
-    bool operator==(const Iterator &other) const = default; // Use =default
-    // Remove operator!=
+    bool operator==(const Iterator &other) const = default;
   };
 
   // Константный итератор
@@ -96,8 +165,7 @@ public:
       return temp;
     }
 
-    bool operator==(const ConstIterator &other) const = default; // Use =default
-    // Remove operator!=
+    bool operator==(const ConstIterator &other) const = default;
   };
 
   Iterator begin() { return Iterator(top_node.get()); }
@@ -106,76 +174,3 @@ public:
   ConstIterator begin() const { return ConstIterator(top_node.get()); }
   ConstIterator end() const { return ConstIterator(nullptr); }
 };
-
-template <typename T>
-Stack<T>::Stack(std::initializer_list<T> init) : top_node(nullptr), size_(0) {
-  for (auto it = init.begin(); it != init.end(); ++it) {
-    push(*it);
-  }
-}
-
-template <typename T>
-Stack<T>::Stack(const Stack &other) : top_node(nullptr), size_(0) {
-  if (!other.empty()) {
-    Stack<T> temp;
-    const Node *current = other.top_node.get();
-    while (current) {
-      temp.push(current->data);
-      current = current->next.get();
-    }
-    while (!temp.empty()) {
-      push(temp.top());
-      temp.pop();
-    }
-  }
-}
-
-template <typename T> Stack<T> &Stack<T>::operator=(const Stack &other) {
-  if (this != &other) {
-    clear();
-    Stack<T> temp(other);
-    *this = std::move(temp);
-  }
-  return *this;
-}
-
-template <typename T> void Stack<T>::push(const T &value) {
-  auto new_node = std::make_unique<Node>(value);
-  new_node->next = std::move(top_node);
-  top_node = std::move(new_node);
-  size_++;
-}
-
-template <typename T> void Stack<T>::pop() {
-  if (empty()) {
-    throw std::runtime_error("Stack is empty");
-  }
-  top_node = std::move(top_node->next);
-  size_--;
-}
-
-template <typename T> T &Stack<T>::top() {
-  if (empty()) {
-    throw std::runtime_error("Stack is empty");
-  }
-  return top_node->data;
-}
-
-template <typename T> const T &Stack<T>::top() const {
-  if (empty()) {
-    throw std::runtime_error("Stack is empty");
-  }
-  return top_node->data;
-}
-
-template <typename T> bool Stack<T>::empty() const {
-  return top_node == nullptr;
-}
-
-template <typename T> size_t Stack<T>::size() const { return size_; }
-
-template <typename T> void Stack<T>::clear() {
-  while (!empty()) {
-    pop();
-  }
-}
