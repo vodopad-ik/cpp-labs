@@ -10,11 +10,11 @@ private:
     std::unique_ptr<Node> next;
     Node(const T &value) : data(value), next(nullptr) {}
   };
-  std::unique_ptr<Node> top_node;
-  size_t size_;
+  std::unique_ptr<Node> top_node = nullptr;
+  size_t size_ = 0;
 
 public:
-  Stack() : top_node(nullptr), size_(0) {}
+  Stack() {}
   Stack(std::initializer_list<T> init);
 
   Stack(const Stack &other);

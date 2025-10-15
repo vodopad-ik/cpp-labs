@@ -8,7 +8,7 @@ int Program::getValidChoice(int min, int max) const {
       "", min, max, "Выберите один из вариантов, представленных в меню!!!\n> ");
 }
 
-Stack<int> Program::inputStack() {
+Stack<int> Program::inputStack() const {
   Stack<int> stack;
   std::cout
       << "Введите элементы стека (целые числа). "
@@ -34,7 +34,8 @@ Stack<int> Program::inputStack() {
   return stack;
 }
 
-void Program::printStack(const Stack<int> &stack, const std::string &message) {
+void Program::printStack(const Stack<int> &stack,
+                         const std::string &message) const {
   if (!message.empty()) {
     std::cout << message;
   }

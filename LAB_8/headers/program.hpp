@@ -6,9 +6,9 @@
 class Program {
 private:
   int getValidChoice(int min, int max) const;
-  Stack<int> inputStack();
+  Stack<int> inputStack()const ;
   void printStack(const Stack<int> &stack,
-                  const std::string &message = "");
+                  const std::string &message = "")const ;
 
 public:
   void run();
