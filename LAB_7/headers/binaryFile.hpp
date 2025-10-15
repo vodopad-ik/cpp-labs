@@ -10,7 +10,6 @@ private:
 
 public:
   explicit BinaryFile(const std::string &file_name);
-
   template <typename T> BinaryFile &operator<<(const T &data) {
     if (std::ofstream file(file_name, std::ios::binary | std::ios::app);
         file.is_open()) {
@@ -26,13 +25,10 @@ public:
     if (std::ifstream file(file_name, std::ios::binary); file.is_open()) {
       if (current_position != 0)
         file.seekg(current_position);
-
       if (file.peek() == EOF) {
         current_position = std::streampos(-1);
         return *this;
       }
-
-      // Безопасное приведение типов
       file.read(static_cast<char *>(static_cast<void *>(&data)), sizeof(T));
 
       if (file.fail())
@@ -47,23 +43,11 @@ public:
     return *this;
   }
 
-  // Специализация для строк
   BinaryFile &operator<<(const std::string &str);
-
   BinaryFile &operator>>(std::string &str);
-
-  // Сброс позиции
   void resetPosition();
-
-  // Получение имени файла
   std::string getFileName() const;
-
-  // Получение текущей позиции
   std::streampos getCurrentPosition() const;
-
-  // Проверка конца файла
   bool isEndOfFile() const;
-
-  // Проверка существования файла и его размера
   bool fileExistsAndNotEmpty() const;
 };

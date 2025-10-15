@@ -30,15 +30,13 @@ public:
     return file;
   }
 
-  // car.hpp (Скрытая дружественная функция с прямым доступом)
-
 friend BinaryFile &operator>>(BinaryFile &file, Car &car) {
     file >> car.license_plate;
     file >> car.year;
     file >> car.color;
-
     return file;
 }
+
   friend std::ostream &operator<<(std::ostream &os, const Car &car) {
     os << "Номер: " << car.license_plate << ", Год: " << car.year
        << ", Цвет: " << car.color;

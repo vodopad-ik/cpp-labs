@@ -4,14 +4,14 @@
 #include <iostream>
 #include <string_view>
 
-const std::string CarNumber::validLetters = "ABEIKMNOPCTX";
-const std::string CarNumber::validDigits = "0123456789";
+const std::string CarNumber::valid_letters = "ABEIKMNOPCTX";
+const std::string CarNumber::valid_digits = "0123456789";
 
-bool CarNumber::isValidDigit(char c) { return validDigits.contains(c); }
+bool CarNumber::isValidDigit(char c) { return valid_digits.contains(c); }
 
 bool CarNumber::isValidLetter(char c) {
-  char upperC = std::toupper(c);
-  return validLetters.contains(upperC);
+  char upper_c = std::toupper(c);
+  return valid_letters.contains(upper_c);
 }
 
 void CarNumber::displayTemplate() {
@@ -42,7 +42,7 @@ bool CarNumber::checkLetters(std::string_view formatted) {
   for (int i = 4; i < 6; i++) {
     if (!CarNumber::isValidLetter(formatted[i])) {
       std::cout << "Ошибка: символы 5-6 должны быть буквами из списка: "
-                << CarNumber::validLetters << std::endl;
+                << CarNumber::valid_letters << std::endl;
       return false;
     }
   }
@@ -87,11 +87,9 @@ std::string CarNumber::inputLicensePlate(const std::string &message) {
     valid = true;
     plate = formatted;
   }
-
   std::string result;
   for (char c : plate)
     result += c;
-
   std::cout << "Принят номер: " << result << std::endl;
   return plate;
 }

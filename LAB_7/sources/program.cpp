@@ -34,7 +34,6 @@ bool Program::run(int choice) const {
     int count = 0;
 
     while (manager.readNextCar(car)) {
-      // Извлекаем инкремент из выражения
       count++;
       std::cout << count << ". ";
       car.display();

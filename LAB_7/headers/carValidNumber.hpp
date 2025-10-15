@@ -5,8 +5,8 @@
 
 class CarNumber {
 private:
-  static const std::string validLetters;
-  static const std::string validDigits;
+  static const std::string valid_letters;
+  static const std::string valid_digits;
 
   static bool isValidDigit(char c);
   static bool isValidLetter(char c);

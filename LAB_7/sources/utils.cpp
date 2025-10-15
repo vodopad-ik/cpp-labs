@@ -61,33 +61,24 @@ bool Utils::isCyrillicChar(unsigned char c) {
 }
 
 bool Utils::isValidCharacter(unsigned char c) {
-  // Разрешаем пробелы и дефисы
   if (c == ' ' || c == '-') {
     return true;
   }
-
-  // Проверяем латинские буквы
   bool isLatinLetter = (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
-
-  // Проверяем кириллические символы (UTF-8)
   bool isCyrillic = isCyrillicChar(c);
-
-  // Проверяем цифры
   bool isDigit = (c >= '0' && c <= '9');
 
-  // Используем init-statement для проверки пунктуации
   if (bool isPunctuation = std::ispunct(c) && c != '-';
       isDigit || isPunctuation) {
     return false;
   }
 
-  // Разрешаем только латинские и кириллические буквы
   return isLatinLetter || isCyrillic;
 }
 
 bool Utils::processCyrillicCharacter(std::string_view str, size_t &i) {
   if (i + 1 < str.length()) {
-    i++; // Пропускаем следующий байт UTF-8 символа
+    i++;
     return true;
   }
   return false;
@@ -95,26 +86,18 @@ bool Utils::processCyrillicCharacter(std::string_view str, size_t &i) {
 
 bool Utils::validateStringCharacters(std::string_view str,
                                      bool &hasMeaningfulChars) {
-  // Используем while для более безопасной обработки индекса
   size_t i = 0;
   while (i < str.length()) {
     unsigned char c = str[i];
 
-    if (!isValidCharacter(c)) {
+    if (!isValidCharacter(c))
       return false;
-    }
-
-    // Считаем только значимые символы (не пробелы и не дефисы)
     if (c != ' ' && c != '-') {
       hasMeaningfulChars = true;
-
-      // Обрабатываем кириллические символы - объединяем условия
-      if (isCyrillicChar(c) && !processCyrillicCharacter(str, i)) {
-        return false; // Некорректный UTF-8 символ
-      }
+      if (isCyrillicChar(c) && !processCyrillicCharacter(str, i))
+        return false;
     }
-
-    i++; // Переходим к следующему символу
+    i++;
   }
   return true;
 }
@@ -123,24 +106,19 @@ std::string Utils::inputOnlyLetters(const std::string &message) {
   std::string str;
 
   while (true) {
-    if (!message.empty()) {
+    if (!message.empty())
       std::cout << message;
-    }
-
-    if (std::cin.peek() == '\n') {
+    if (std::cin.peek() == '\n')
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
-
     std::getline(std::cin, str);
 
     bool hasMeaningfulChars = false;
     bool allValidChars = validateStringCharacters(str, hasMeaningfulChars);
 
-    if (allValidChars && hasMeaningfulChars) {
+    if (allValidChars && hasMeaningfulChars)
       return str;
-    } else {
+    else
       std::cout << "Некорректный ввод. Введите только буквы (русские, "
                    "английские и пробелы): ";
-    }
   }
 }

@@ -6,7 +6,7 @@
 using namespace std;
 
 double Utils::input(const string &message) {
-  if (!message.empty()) 
+  if (!message.empty())
     cout << message;
 
   double number;
@@ -25,7 +25,7 @@ double Utils::input(const string &message) {
 }
 
 string Utils::inputString(const string &message) {
-  if (!message.empty()) 
+  if (!message.empty())
     cout << message;
 
   string str;
@@ -39,17 +39,14 @@ double Utils::stringToDouble(const std::string &str) {
   }
 
   string s = str;
-  // Удаляем пробелы в начале и конце
   while (!s.empty() && isspace(s[0]))
     s.erase(0, 1);
   while (!s.empty() && isspace(s.back()))
     s.pop_back();
 
-  if (s.empty()) {
+  if (s.empty())
     throw invalid_argument("Строка содержит только пробелы");
-  }
 
-  // Проверяем специальные случаи
   if (s == "+" || s.empty())
     return 1.0;
   if (s == "-")
@@ -61,34 +58,28 @@ double Utils::stringToDouble(const std::string &str) {
   bool has_digit = false;
   bool has_point = false;
   size_t i = 0;
-
-  // Обрабатываем знак
-  if (s[i] == '+') {
+  if (s[i] == '+')
     i++;
-  } else if (s[i] == '-') {
+  else if (s[i] == '-') {
     sign = -1.0;
     i++;
   }
-
-  // Обрабатываем целую и дробную части
   for (; i < s.length(); i++) {
     if (s[i] == '.') {
-      if (has_point) {
+      if (has_point)
         throw invalid_argument("Несколько точек в числе: " + str);
-      }
       has_point = true;
       fraction = 0.1;
     } else if (isdigit(s[i])) {
       has_digit = true;
-      if (!has_point) {
+      if (!has_point)
         result = result * 10.0 + (s[i] - '0');
-      } else {
+      else {
         result += (s[i] - '0') * fraction;
         fraction *= 0.1;
       }
-    } else {
+    } else
       throw invalid_argument("Недопустимый символ в числе: " + string(1, s[i]));
-    }
   }
 
   if (!has_digit)
