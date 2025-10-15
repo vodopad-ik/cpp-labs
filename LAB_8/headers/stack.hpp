@@ -3,26 +3,31 @@
 #include <iostream>
 #include <memory>
 
-template <typename T> class Stack {
+template <typename T> 
+class Stack {
 private:
   struct Node {
     T data;
-    std::unique_ptr<Node> next;
-    Node(const T &value) : data(value), next(nullptr) {}
+    std::unique_ptr<Node> next = nullptr; // In-class initializer
+    
+    explicit Node(const T &value) : data(value) {} // explicit keyword, removed next from initializer list
   };
+
   std::unique_ptr<Node> top_node = nullptr;
   size_t size_ = 0;
 
 public:
-  Stack() {}
+  Stack() = default; // Use =default
   Stack(std::initializer_list<T> init);
 
+  // Правило пяти
   Stack(const Stack &other);
   Stack &operator=(const Stack &other);
   Stack(Stack &&other) noexcept = default;
   Stack &operator=(Stack &&other) noexcept = default;
-  ~Stack() = default;
+  ~Stack() = default; // Use =default
 
+  // Основные операции
   void push(const T &value);
   void pop();
   T &top();
@@ -31,6 +36,7 @@ public:
   size_t size() const;
   void clear();
 
+  // Итератор
   class Iterator {
   private:
     Node *current;
@@ -48,8 +54,7 @@ public:
     T *operator->() const { return &current->data; }
 
     Iterator &operator++() {
-      if (current)
-        current = current->next.get();
+      if (current) current = current->next.get();
       return *this;
     }
 
@@ -59,13 +64,11 @@ public:
       return temp;
     }
 
-    bool operator==(const Iterator &other) const {
-      return current == other.current;
-    }
-
-    bool operator!=(const Iterator &other) const { return !(*this == other); }
+    bool operator==(const Iterator &other) const = default; // Use =default
+    // Remove operator!=
   };
 
+  // Константный итератор
   class ConstIterator {
   private:
     const Node *current;
@@ -83,8 +86,7 @@ public:
     const T *operator->() const { return &current->data; }
 
     ConstIterator &operator++() {
-      if (current)
-        current = current->next.get();
+      if (current) current = current->next.get();
       return *this;
     }
 
@@ -94,13 +96,8 @@ public:
       return temp;
     }
 
-    bool operator==(const ConstIterator &other) const {
-      return current == other.current;
-    }
-
-    bool operator!=(const ConstIterator &other) const {
-      return !(*this == other);
-    }
+    bool operator==(const ConstIterator &other) const = default; // Use =default
+    // Remove operator!=
   };
 
   Iterator begin() { return Iterator(top_node.get()); }

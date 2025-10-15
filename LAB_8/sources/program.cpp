@@ -45,7 +45,7 @@ void Program::printStack(const Stack<int> &stack,
   std::cout << std::endl;
 }
 
-void Program::run() {
+void Program::run() const {
   Stack<int> stack = inputStack();
   if (stack.empty()) {
     std::cout << "Стек пуст.\n";
@@ -76,8 +76,6 @@ void Program::run() {
 
       std::cout << "ОТСОРТИРОВАННЫЙ СТЕК: ";
       printStack(stack);
-
-      // Проверка отсортированности
       if (StackAlgorithms<int>::isSorted(stack)) {
         std::cout << "Стек отсортирован корректно!\n";
       } else {
