@@ -24,7 +24,7 @@ Stack<int> Program::inputStack() const {
       break;
     }
     stack.push(value);
-    count++;
+    count++; 
     std::cout << "Элемент " << value << " добавлен в стек.\n";
   }
   if (count == 0)
