@@ -17,9 +17,9 @@ Stack<int> Program::inputStack() const {
   int count = 0;
   while (true) {
     int value;
-    bool success =
-        Utils::inputInt(value, "Введите число (или Enter для завершения): ");
-    if (!success) {
+    if (bool success = Utils::inputInt(
+            value, "Введите число (или Enter для завершения): ");
+        !success) {
       std::cout << "Ввод завершен.\n";
       break;
     }
