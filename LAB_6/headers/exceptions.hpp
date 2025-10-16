@@ -2,37 +2,34 @@
 #include <stdexcept>
 #include <string>
 
-// Базовое исключение для математических операций
 class MathException : public std::runtime_error {
 public:
-    using std::runtime_error::runtime_error;  // Наследуем все конструкторы
+    using std::runtime_error::runtime_error;
 };
 
-// Исключения для парсера уравнений
 class ParserException : public MathException {
 public:
-    using MathException::MathException;  // Наследуем все конструкторы
+    using MathException::MathException;
 };
 
 class InvalidEquationException : public ParserException {
 public:
-    using ParserException::ParserException;  // Наследуем все конструкторы
+    using ParserException::ParserException;
 };
 
 class InvalidCharacterException : public ParserException {
 public:
-    using ParserException::ParserException;  // Наследуем все конструкторы
+    using ParserException::ParserException;
 };
 
 class InvalidNumberFormatException : public ParserException {
 public:
-    using ParserException::ParserException;  // Наследуем все конструкторы
+    using ParserException::ParserException;
 };
 
-// Исключения для математических операций
 class MathOperationException : public MathException {
 public:
-    using MathException::MathException;  // Наследуем все конструкторы
+    using MathException::MathException;
 };
 
 class ZeroCoefficientException : public MathOperationException {
@@ -46,8 +43,7 @@ public:
     StackEmptyException() : MathException("Stack is empty") {}
 };
 
-// Исключения для ввода/вывода
 class IOException : public MathException {
 public:
-    using MathException::MathException;  // Наследуем все конструкторы
+    using MathException::MathException; 
 };

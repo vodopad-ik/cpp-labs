@@ -5,19 +5,21 @@
 #include <cctype>
 #include <iostream>
 
-double Parser::parseNumber(const std::string &num_str, double default_value) {
+using namespace std;
+
+double Parser::parseNumber(const string &num_str, double default_value) {
   if (num_str.empty() || num_str == "+")
     return default_value;
   if (num_str == "-")
     return -default_value;
   try {
     return Utils::stringToDouble(num_str);
-  } catch (const std::exception &) {
+  } catch (const exception &) {
     throw InvalidNumberFormatException("'" + num_str + "'");
   }
 }
 
-std::string Parser::validateEquationString(const std::string &str) {
+string Parser::validateEquationString(const string &str) {
   validateAllowedChars(str);
   string simplified = simplifyString(str);
 
@@ -27,8 +29,8 @@ std::string Parser::validateEquationString(const std::string &str) {
   return simplified;
 }
 
-void Parser::validateAllowedChars(const std::string &str) {
-  const std::string allowed_chars = "0123456789+-*=^x. ";
+void Parser::validateAllowedChars(const string &str) {
+  const string allowed_chars = "0123456789+-*=^x. ";
   for (char c : str) {
     if (!allowed_chars.contains(c)) {
       throw InvalidCharacterException(
@@ -46,7 +48,7 @@ std::string Parser::simplifyString(const std::string &str) {
   return simplified;
 }
 
-void Parser::validateBasicStructure(const std::string &simplified) {
+void Parser::validateBasicStructure(const string &simplified) {
   if (!simplified.contains("x^2")) {
     throw InvalidEquationException(
         "Это не квадратное уравнение. Должен быть член с x^2");
@@ -101,7 +103,6 @@ void Parser::validateDotPosition(const std::string &str, size_t pos) {
 void Parser::parseEquationString(const std::string &equationStr, double &a,
                                  double &b, double &c) {
   string simplified = validateEquationString(equationStr);
-  cout << "Упрощенная строка: " << simplified << endl;
   a = 1.0;
   b = 0.0;
   c = 0.0;
@@ -123,19 +124,15 @@ void Parser::parseA(string &simplified, double &a) {
 
   if (std::regex_search(simplified, a_match, a_pattern) && a_match.size() > 1) {
     std::string a_str = a_match[1].str();
-    std::cout << "Найден коэффициент a: '" << a_str << "'" << std::endl;
     a = parseNumber(a_str, 1.0);
     simplified = std::regex_replace(simplified, a_pattern, "");
-    std::cout << "Строка после удаления a: " << simplified << std::endl;
   } else {
     std::regex x2_default_pattern(R"(([+-]?)x\^2)");
     if (std::regex_search(simplified, a_match, x2_default_pattern) &&
         a_match.size() > 1) {
       std::string sign = a_match[1].str();
       a = (sign == "-") ? -1.0 : 1.0;
-      std::cout << "Найден коэффициент a по умолчанию: " << a << std::endl;
       simplified = std::regex_replace(simplified, x2_default_pattern, "");
-      std::cout << "Строка после удаления a: " << simplified << std::endl;
     }
   }
 }
@@ -145,10 +142,8 @@ void Parser::parseB(string &simplified, double &b) {
   std::smatch b_match;
   if (std::regex_search(simplified, b_match, b_pattern) && b_match.size() > 1) {
     std::string b_str = b_match[1].str();
-    std::cout << "Найден коэффициент b: '" << b_str << "'" << std::endl;
     b = parseNumber(b_str, 1.0);
     simplified = std::regex_replace(simplified, b_pattern, "");
-    std::cout << "Строка после удаления b: " << simplified << std::endl;
   }
 }
 

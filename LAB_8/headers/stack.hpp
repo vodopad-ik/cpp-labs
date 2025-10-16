@@ -30,7 +30,9 @@ public:
   // Деструктор (Участие в управлении ресурсами)
   // Поскольку top_node - это std::unique_ptr, его деструктор автоматически
   // удалит всю цепочку узлов. Мы используем = default для явного определения.
-  ~Stack() = default; 
+ ~Stack() {
+    clear(); // Явно очищаем стек
+}
   
   Stack(std::initializer_list<T> init) {
     for (const auto& item : init) {
