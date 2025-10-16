@@ -2,6 +2,7 @@
 #include "classB.hpp"
 #include "classC.hpp"
 #include "utils.hpp"
+#include "exceptions.hpp"
 using namespace std;
 
 int main() {
@@ -13,8 +14,14 @@ int main() {
       equation.solve();
       equation.printSolve();
       break;
-    } catch (const invalid_argument &e) {
-      cout << " " << e.what() << endl;
+    } catch (const InvalidEquationException &e) {
+      cout << "Ошибка в уравнении: " << e.what() << endl;
+      cout << "Попробуйте снова.\n";
+    } catch (const ZeroCoefficientException &e) {
+      cout << "Математическая ошибка: " << e.what() << endl;
+      cout << "Попробуйте снова.\n";
+    } catch (const MathException &e) {
+      cout << "Ошибка: " << e.what() << endl;
       cout << "Попробуйте снова.\n";
     } catch (const exception &e) {
       cout << "Неожиданная ошибка: " << e.what() << endl;

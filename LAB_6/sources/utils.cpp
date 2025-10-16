@@ -1,4 +1,5 @@
 #include "utils.hpp"
+#include "exceptions.hpp"
 #include <cctype>
 #include <iostream>
 #include <limits>
@@ -34,9 +35,8 @@ string Utils::inputString(const string &message) {
 }
 
 double Utils::stringToDouble(const std::string &str) {
-  if (str.empty()) {
-    throw invalid_argument("Пустая строка не может быть преобразована в число");
-  }
+  if (str.empty()) 
+    throw InvalidNumberFormatException("Пустая строка не может быть преобразована в число");
 
   string s = str;
   while (!s.empty() && isspace(s[0]))
@@ -45,7 +45,7 @@ double Utils::stringToDouble(const std::string &str) {
     s.pop_back();
 
   if (s.empty())
-    throw invalid_argument("Строка содержит только пробелы");
+    throw InvalidNumberFormatException("Строка содержит только пробелы");
 
   if (s == "+" || s.empty())
     return 1.0;
@@ -67,7 +67,7 @@ double Utils::stringToDouble(const std::string &str) {
   for (; i < s.length(); i++) {
     if (s[i] == '.') {
       if (has_point)
-        throw invalid_argument("Несколько точек в числе: " + str);
+        throw InvalidNumberFormatException("Несколько точек в числе: " + str);
       has_point = true;
       fraction = 0.1;
     } else if (isdigit(s[i])) {
@@ -79,10 +79,10 @@ double Utils::stringToDouble(const std::string &str) {
         fraction *= 0.1;
       }
     } else
-      throw invalid_argument("Недопустимый символ в числе: " + string(1, s[i]));
+      throw InvalidNumberFormatException("Недопустимый символ в числе: " + string(1, s[i]));
   }
 
   if (!has_digit)
-    throw invalid_argument("Нет цифр в числе: " + str);
+    throw InvalidNumberFormatException("Нет цифр в числе: " + str);
   return sign * result;
 }

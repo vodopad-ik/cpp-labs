@@ -2,6 +2,7 @@
 #include "classA.hpp"
 #include "classB.hpp"
 #include "parser.hpp"
+#include "exceptions.hpp"
 #include <complex>
 #include <string_view>
 

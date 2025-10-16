@@ -1,10 +1,9 @@
 #include "parser.hpp"
 #include "utils.hpp"
+#include "exceptions.hpp"
 #include <algorithm>
 #include <cctype>
 #include <iostream>
-
-using namespace std;
 
 double Parser::parseNumber(const std::string &num_str, double default_value) {
   if (num_str.empty() || num_str == "+")
@@ -14,8 +13,7 @@ double Parser::parseNumber(const std::string &num_str, double default_value) {
   try {
     return Utils::stringToDouble(num_str);
   } catch (const std::exception &) {
-    throw std::invalid_argument("Некорректный числовой формат: '" + num_str +
-                                "'");
+    throw InvalidNumberFormatException("'" + num_str + "'");
   }
 }
 
@@ -33,7 +31,7 @@ void Parser::validateAllowedChars(const std::string &str) {
   const std::string allowed_chars = "0123456789+-*=^x. ";
   for (char c : str) {
     if (!allowed_chars.contains(c)) {
-      throw std::invalid_argument(
+      throw InvalidCharacterException(
           "Обнаружены запрещенные символы. Разрешены только "
           "цифры и следующие символы: '+', '-', '*', "
           "'=', '^', 'x', '.'.");
@@ -50,14 +48,14 @@ std::string Parser::simplifyString(const std::string &str) {
 
 void Parser::validateBasicStructure(const std::string &simplified) {
   if (!simplified.contains("x^2")) {
-    throw std::invalid_argument(
+    throw InvalidEquationException(
         "Это не квадратное уравнение. Должен быть член с x^2");
   }
 
   if (!simplified.contains('='))
-    throw std::invalid_argument("Уравнение должно содержать знак '='");
+    throw InvalidEquationException("Уравнение должно содержать знак '='");
   if (std::regex_search(simplified, std::regex(R"(x\^2\d)"))) {
-    throw std::invalid_argument(
+    throw InvalidEquationException(
         "Некорректный формат: после x^2 не должно быть цифр без оператора");
   }
 }
@@ -73,7 +71,7 @@ void Parser::validateRegexPatterns(const std::string &str) {
 
   for (const auto &[pattern, error_msg] : patterns) {
     if (regex_search(str, pattern))
-      throw std::invalid_argument(error_msg);
+      throw InvalidEquationException(error_msg);
   }
 }
 
@@ -88,16 +86,16 @@ void Parser::validateDigitsAndDots(const std::string &str) {
   }
 
   if (!has_digit)
-    throw std::invalid_argument("Строка должна содержать хотя бы одну цифру");
+    throw InvalidEquationException("Строка должна содержать хотя бы одну цифру");
 }
 
 void Parser::validateDotPosition(const std::string &str, size_t pos) {
   if (pos == 0 || pos == str.length() - 1)
-    throw std::invalid_argument("Некорректное использование точки в числе");
+    throw InvalidNumberFormatException("Некорректное использование точки в числе");
   if (!isdigit(str[pos - 1]))
-    throw std::invalid_argument("Перед точкой должна быть цифра");
+    throw InvalidNumberFormatException("Перед точкой должна быть цифра");
   if (pos + 1 < str.length() && !isdigit(str[pos + 1]))
-    throw std::invalid_argument("После точки должна быть цифра");
+    throw InvalidNumberFormatException("После точки должна быть цифра");
 }
 
 void Parser::parseEquationString(const std::string &equationStr, double &a,
@@ -112,7 +110,7 @@ void Parser::parseEquationString(const std::string &equationStr, double &a,
   parseC(simplified, c);
 
   if (!isAFound(equationStr))
-    throw invalid_argument("Не удалось распознать квадратное уравнение. "
+    throw InvalidEquationException("Не удалось распознать квадратное уравнение. "
                            "Убедитесь, что есть член с x^2");
 
   cout << "Распознанные коэффициенты: a=" << a << ", b=" << b << ", c=" << c
@@ -172,7 +170,7 @@ void Parser::parseC(const std::string &simplified, double &c_val) {
       else if (isValidNumber(left_part))
         left_c = Utils::stringToDouble(left_part);
       else if (!left_part.empty())
-        throw std::invalid_argument(
+        throw InvalidEquationException(
             "Недопустимые символы в свободном члене слева: '" + left_part +
             "'");
     }
@@ -185,13 +183,14 @@ void Parser::parseC(const std::string &simplified, double &c_val) {
       else if (isValidNumber(right_part))
         right_c = Utils::stringToDouble(right_part);
       else if (!right_part.empty())
-        throw std::invalid_argument(
+        throw InvalidEquationException(
             "Недопустимые символы в свободном члене справа: '" + right_part +
             "'");
     }
     c_val = left_c - right_c;
   }
 }
+
 bool Parser::isAFound(const std::string &simplified) {
   std::string temp = simplified;
   std::erase(temp, ' ');

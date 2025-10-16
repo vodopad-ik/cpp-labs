@@ -2,14 +2,14 @@
 #include <algorithm>
 #include <cctype>
 #include <regex>
-#include <stdexcept>
+#include <cmath>
 using namespace std;
 
 C::C(double a_val, double b_val, double c_val) : B(a_val, b_val), c(c_val) {
   if (a_val == 0)
-    throw invalid_argument(
-        "Коэффициент a не может быть равен нулю для квадратного уравнения");
+    throw ZeroCoefficientException("a");
 }
+
 C::C(const std::string &equation) {
   std::string equation_str =
       equation.empty() ? Utils::inputString("Введите квадратное уравнение: ")
@@ -28,6 +28,7 @@ void C::setC(double val) { c = val; }
 double C::getC() const { return c; }
 std::complex<double> C::getX1() const { return x1; }
 std::complex<double> C::getX2() const { return x2; }
+
 void C::printEquation() const {
   double a = getA();
   double b = getB();
