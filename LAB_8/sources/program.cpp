@@ -62,9 +62,9 @@ void Program::run() const {
       return;
     case 1: {
       int search_value = Utils::inputInt("\nВведите элемент для поиска: ");
-      auto search_result =
-          StackAlgorithms<int>::linearSearch(stack, search_value);
-      if (search_result != stack.end()) {
+      if (auto search_result =
+              StackAlgorithms<int>::linearSearch(stack, search_value);
+          search_result != stack.end()) {
         std::cout << "Элемент " << search_value << " найден в стеке!\n";
       } else {
         std::cout << "Элемент " << search_value << " не найден в стеке.\n";

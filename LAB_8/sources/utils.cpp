@@ -37,12 +37,14 @@ int Utils::inputInt(const std::string &message) {
 }
 
 bool Utils::inputInt(int &result, const std::string &message) {
-  if (!message.empty()) 
+  if (!message.empty()) {
     std::cout << message;
+  }
   std::string input;
   std::getline(std::cin, input);
-  if (input.empty()) 
+  if (input.empty()) {
     return false;
+  }
   try {
     size_t pos;
     result = std::stoi(input, &pos);
@@ -52,16 +54,20 @@ bool Utils::inputInt(int &result, const std::string &message) {
       return inputInt(result, message);
     }
     return true;
-  } catch (const std::exception &e) {
+  } catch (const std::invalid_argument&) {
     std::cout << "Некорректный ввод. Пожалуйста, введите целое число.\n";
+    return inputInt(result, message);
+  } catch (const std::out_of_range&) {
+    std::cout << "Число слишком большое. Пожалуйста, введите другое число.\n";
     return inputInt(result, message);
   }
 }
 
 int Utils::inputIntInRange(const std::string &message, int min_value,
                            int max_value, const std::string &errorMessage) {
-  if (!message.empty())
-  std::cout << message;
+  if (!message.empty()) {
+    std::cout << message;
+  }
   while (true) {
     int number;
     if (inputInt(number, "")) {
@@ -69,8 +75,9 @@ int Utils::inputIntInRange(const std::string &message, int min_value,
         std::cout << errorMessage;
         std::cout << "Допустимый диапазон: от " << min_value << " до "
                   << max_value << ". Попробуйте снова: ";
-      } else
+      } else {
         return number;
+      }
     } else {
       std::cout
           << "Ввод не может быть пустым. Пожалуйста, выберите пункт меню: ";
