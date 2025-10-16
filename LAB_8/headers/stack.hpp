@@ -4,10 +4,9 @@
 #include <memory>
 #include <stdexcept>
 
-// Специализированное исключение для стека
 class StackEmptyException : public std::runtime_error {
 public:
-    StackEmptyException() : std::runtime_error("Stack is empty") {}
+    StackEmptyException() : std::runtime_error("Cтек пуст.") {}
 };
 
 template <typename T> 
@@ -15,9 +14,7 @@ class Stack {
 private:
   struct Node {
     T data;
-    // std::unique_ptr обеспечивает автоматическое управление памятью для следующего узла
     std::unique_ptr<Node> next = nullptr;
-    
     explicit Node(const T &value) : data(value) {}
   };
 
@@ -26,12 +23,8 @@ private:
 
 public:
   Stack() = default;
-  
-  // Деструктор (Участие в управлении ресурсами)
-  // Поскольку top_node - это std::unique_ptr, его деструктор автоматически
-  // удалит всю цепочку узлов. Мы используем = default для явного определения.
  ~Stack() {
-    clear(); // Явно очищаем стек
+    clear();
 }
   
   Stack(std::initializer_list<T> init) {
@@ -40,18 +33,14 @@ public:
     }
   }
 
-  // Правило пяти: Конструктор копирования
   Stack(const Stack &other) {
     if (!other.empty()) {
       Stack<T> temp;
-      // Копирование узлов в обратном порядке (temp - это временный стек)
       const Node *current = other.top_node.get();
       while (current) {
         temp.push(current->data);
         current = current->next.get();
       }
-      
-      // Перенос элементов из temp в *this (восстановление правильного порядка)
       while (!temp.empty()) {
         push(temp.top()); 
         temp.pop();
@@ -59,25 +48,20 @@ public:
     }
   }
   
-  // Правило пяти: Оператор присваивания копированием (идиома copy-and-swap)
   Stack &operator=(const Stack &other) {
     if (this != &other) {
-      clear(); // Очистка текущего содержимого
-      Stack<T> temp(other); // Создание копии
-      *this = std::move(temp); // Использование оператора перемещения
+      clear();
+      Stack<T> temp(other); 
+      *this = std::move(temp);
     }
     return *this;
   }
-  
-  // Правило пяти: Конструктор перемещения
   Stack(Stack &&other) noexcept 
     : top_node(std::move(other.top_node)), 
       size_(other.size_) 
   {
     other.size_ = 0;
   }
-  
-  // Правило пяти: Оператор присваивания перемещением
   Stack &operator=(Stack &&other) noexcept {
     if (this != &other) {
       top_node = std::move(other.top_node);
@@ -86,8 +70,6 @@ public:
     }
     return *this;
   }
-
-  // Основные операции
   
   void push(const T &value) {
     auto new_node = std::make_unique<Node>(value);
@@ -131,7 +113,6 @@ public:
     size_ = 0;
   }
 
-  // Итераторы (без изменений)
   class Iterator {
   private:
     Node *current;
@@ -162,7 +143,6 @@ public:
     bool operator==(const Iterator &other) const = default;
   };
 
-  // Константный итератор
   class ConstIterator {
   private:
     const Node *current;
